@@ -1,0 +1,114 @@
+/* =========================================================================
+   header.css
+   - components/header.html 에 대응하는 스타일
+   ========================================================================= */
+
+header.site-header {
+  background: var(--navy);
+}
+
+/* ---------- 상단 유틸 바 (로그인/마이페이지/로그아웃) ---------- */
+.top-util {
+  background: var(--navy-soft);
+  font-size: 0.8rem;
+}
+.top-util .container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+}
+.top-util a {
+  color: #c4cedc;
+  margin-left: 1.1rem;
+  font-weight: 500;
+}
+.top-util a:hover { color: #fff; }
+.top-util .divider {
+  color: rgba(255, 255, 255, 0.2);
+  margin-left: 1.1rem;
+}
+.top-util .user-name { color: #fff; font-weight: 700; }
+
+/* ---------- 로고 ---------- */
+.logo {
+  font-weight: 800;
+  font-size: 1.45rem;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+.logo span { color: var(--teal); }
+
+/* ---------- 메인 내비게이션 ---------- */
+.main-nav .nav-link {
+  color: #dce3ec;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+}
+.main-nav .nav-link i { margin-right: 0.35rem; }
+.main-nav .nav-link:hover,
+.main-nav .nav-link.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- 퀵메뉴 섹션 (메인 페이지 전용이지만 헤더 바로 아래 위치) ---------- */
+.quick-section {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+  padding: 2.2rem 0 3.2rem;
+}
+.quick-section .lead-text { color: #aebbcc; font-size: 0.95rem; }
+.quick-section h2 { color: #fff; font-size: 1.35rem; margin-bottom: 1.4rem; }
+
+.quick-btn {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.3rem 1rem;
+  text-align: center;
+  display: block;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  height: 100%;
+}
+.quick-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.18);
+}
+.quick-btn .icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--teal-tint);
+  color: var(--teal-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.7rem;
+  font-size: 1.4rem;
+}
+.quick-btn span {
+  display: block;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+/* ---------- 서브페이지용 간단 헤더 배너 (퀵메뉴 대체) ---------- */
+.sub-banner {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+  padding: 1.6rem 0;
+}
+.sub-banner h1 {
+  color: #fff;
+  font-size: 1.3rem;
+  margin: 0;
+}
+.sub-banner .breadcrumb {
+  --bs-breadcrumb-divider-color: rgba(255,255,255,.4);
+  margin: 0.3rem 0 0;
+  font-size: 0.8rem;
+}
+.sub-banner .breadcrumb a { color: #aebbcc; }
+.sub-banner .breadcrumb-item.active { color: #fff; font-weight: 600; }

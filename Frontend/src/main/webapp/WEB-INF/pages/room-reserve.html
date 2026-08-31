@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会議室予約 | InfraLink</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../css/header.css">
+<link rel="stylesheet" href="../css/footer.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body data-page="room-reserve">
+
+<div id="header-placeholder"></div>
+<div id="modal-placeholder"></div>
+
+<section class="sub-banner">
+  <div class="container">
+    <h1><i class="bi bi-door-open"></i> 会議室予約</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../index.html">ホーム</a></li>
+        <li class="breadcrumb-item active" aria-current="page">会議室予約</li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<div id="app-content">
+  <div class="container content-wrap">
+    <div class="row g-4">
+      <aside class="col-lg-3"><div id="sidebar-placeholder"></div></aside>
+
+      <section class="col-lg-9">
+        <!-- ==================== 회의실 카드 ==================== -->
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <div class="panel p-3">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h6 class="mb-0">3階 大会議室</h6>
+                <span class="status-pill status-normal">空室</span>
+              </div>
+              <p class="text-muted small mb-2"><i class="bi bi-people"></i> 最大 20名 &nbsp; | &nbsp; <i class="bi bi-projector"></i> プロジェクター完備</p>
+              <button class="btn btn-teal btn-sm w-100">予約する</button>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="panel p-3">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h6 class="mb-0">役員会議室</h6>
+                <span class="status-pill status-wait">使用中</span>
+              </div>
+              <p class="text-muted small mb-2"><i class="bi bi-people"></i> 最大 10名 &nbsp; | &nbsp; <i class="bi bi-tv"></i> テレビ会議対応</p>
+              <button class="btn btn-outline-secondary btn-sm w-100" disabled>予約不可</button>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="panel p-3">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h6 class="mb-0">2階 セミナー室</h6>
+                <span class="status-pill status-normal">空室</span>
+              </div>
+              <p class="text-muted small mb-2"><i class="bi bi-people"></i> 最大 40名 &nbsp; | &nbsp; <i class="bi bi-mic"></i> 音響設備完備</p>
+              <button class="btn btn-teal btn-sm w-100">予約する</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== 오늘의 예약 현황 ==================== -->
+        <div class="panel">
+          <div class="panel-header">
+            <h5><i class="bi bi-calendar-check"></i> 本日の予約状況</h5>
+            <span class="text-muted" style="font-size:.8rem;">2026.08.15（土）</span>
+          </div>
+          <div class="table-scroll">
+            <table class="table list-table mb-0">
+              <thead>
+                <tr>
+                  <th style="width:110px;" class="text-center">時間</th>
+                  <th style="width:160px;">会議室</th>
+                  <th>会議名</th>
+                  <th style="width:120px;" class="text-center">予約者</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-center">10:00〜11:00</td>
+                  <td>3階 大会議室</td>
+                  <td>週次チーム定例会議</td>
+                  <td class="text-center">田中 誠</td>
+                </tr>
+                <tr>
+                  <td class="text-center">14:00〜15:30</td>
+                  <td>役員会議室</td>
+                  <td>第2四半期 実績報告</td>
+                  <td class="text-center">山田 太郎</td>
+                </tr>
+                <tr>
+                  <td class="text-center">16:00〜17:00</td>
+                  <td>2階 セミナー室</td>
+                  <td>新規プロジェクト キックオフミーティング</td>
+                  <td class="text-center">佐藤 花子</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div id="footer-placeholder"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="../js/common.js"></script>
+</body>
+</html>

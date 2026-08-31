@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>掲示板 | InfraLink</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../css/header.css">
+<link rel="stylesheet" href="../css/footer.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body data-page="board">
+
+<div id="header-placeholder"></div>
+<div id="modal-placeholder"></div>
+
+<section class="sub-banner">
+  <div class="container">
+    <h1><i class="bi bi-clipboard2-data"></i> 掲示板</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../index.html">ホーム</a></li>
+        <li class="breadcrumb-item active" aria-current="page">掲示板</li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<div id="app-content">
+  <div class="container content-wrap">
+    <div class="row g-4">
+      <aside class="col-lg-3"><div id="sidebar-placeholder"></div></aside>
+
+      <section class="col-lg-9">
+        <!-- ==================== 게시판 탭 ==================== -->
+        <ul class="nav nav-pills mb-3 gap-2">
+          <li class="nav-item"><a class="nav-link active btn-teal text-white" href="board-list.html">自由掲示板</a></li>
+          <li class="nav-item"><a class="nav-link" style="color:var(--ink-soft);" href="#">情報共有</a></li>
+          <li class="nav-item"><a class="nav-link" style="color:var(--ink-soft);" href="#">中古売買</a></li>
+          <li class="nav-item"><a class="nav-link" style="color:var(--ink-soft);" href="#">Q&amp;A</a></li>
+        </ul>
+
+        <div class="filter-bar">
+          <select class="form-select form-select-sm" style="width:150px;">
+            <option selected>全体</option>
+            <option>人事部</option>
+            <option>総務部</option>
+            <option>開発部</option>
+          </select>
+          <div class="input-group input-group-sm ms-auto" style="max-width:260px;">
+            <input type="text" class="form-control" placeholder="タイトルまたは内容を検索">
+            <button class="btn btn-teal" type="button"><i class="bi bi-search"></i></button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h5><i class="bi bi-chat-square-text"></i> 自由掲示板</h5>
+            <span class="text-muted" style="font-size:.8rem;">全 156件</span>
+          </div>
+          <div class="table-scroll">
+            <table class="table list-table mb-0">
+              <thead>
+                <tr>
+                  <th style="width:60px;" class="text-center">No</th>
+                  <th>タイトル</th>
+                  <th style="width:120px;" class="text-center">作成者</th>
+                  <th style="width:110px;" class="text-center">登録日</th>
+                  <th style="width:70px;" class="text-center">閲覧</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-center">156</td>
+                  <td><a href="board-view.html?no=156" class="title-link">社員食堂の新メニュー、みなさんはどう思いますか？</a><span class="count-reply">[12]</span></td>
+                  <td class="text-center">佐藤 花子</td>
+                  <td class="text-center">2026.08.13</td>
+                  <td class="text-center">88</td>
+                </tr>
+                <tr>
+                  <td class="text-center">155</td>
+                  <td><a href="board-view.html?no=155" class="title-link">今週金曜、開発部の歓迎会あります（自由参加）</a><span class="count-reply">[5]</span></td>
+                  <td class="text-center">鈴木 一郎</td>
+                  <td class="text-center">2026.08.12</td>
+                  <td class="text-center">64</td>
+                </tr>
+                <tr>
+                  <td class="text-center">154</td>
+                  <td><a href="board-view.html?no=154" class="title-link">オフィスの空調が寒すぎます…調整可能でしょうか</a><span class="count-reply">[9]</span></td>
+                  <td class="text-center">田中 誠</td>
+                  <td class="text-center">2026.08.11</td>
+                  <td class="text-center">102</td>
+                </tr>
+                <tr>
+                  <td class="text-center">153</td>
+                  <td><a href="board-view.html?no=153" class="title-link">社内ランニングクラブ、新規メンバー募集中です</a><span class="count-reply">[3]</span></td>
+                  <td class="text-center">高橋 直子</td>
+                  <td class="text-center">2026.08.10</td>
+                  <td class="text-center">41</td>
+                </tr>
+                <tr>
+                  <td class="text-center">152</td>
+                  <td><a href="board-view.html?no=152" class="title-link">3階の休憩室のコーヒーマシンが故障しています</a><span class="count-reply">[7]</span></td>
+                  <td class="text-center">伊藤 健</td>
+                  <td class="text-center">2026.08.09</td>
+                  <td class="text-center">53</td>
+                </tr>
+                <tr>
+                  <td class="text-center">151</td>
+                  <td><a href="board-view.html?no=151" class="title-link">在宅勤務時のVPN接続方法まとめ</a><span class="count-reply">[15]</span></td>
+                  <td class="text-center">渡辺 健太</td>
+                  <td class="text-center">2026.08.08</td>
+                  <td class="text-center">210</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <a href="board-write.html" class="btn btn-teal btn-sm"><i class="bi bi-pencil-square"></i> 投稿する</a>
+        </div>
+
+        <div class="pagination-wrap">
+          <ul class="pagination">
+            <li class="page-item disabled"><a class="page-link" href="#">前へ</a></li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">次へ</a></li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div id="footer-placeholder"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/board.js"></script>
+</body>
+</html>
