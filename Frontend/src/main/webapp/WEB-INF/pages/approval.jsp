@@ -1,24 +1,36 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>電子決裁 | InfraLink</title>
-
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="../css/common.css">
-<link rel="stylesheet" href="../css/header.css">
-<link rel="stylesheet" href="../css/footer.css">
-<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/common.css">
+
+<link rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/header.css">
+
+<link rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/footer.css">
+
+<link rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/main.css">
+
+<link rel="stylesheet"
+      href="${pageContext.request.contextPath}/css/responsive.css">
 </head>
 <body data-page="approval">
-
-<div id="header-placeholder"></div>
-<div id="modal-placeholder"></div>
+<%@ include file="../../components/header.jsp"%>
+<%@ include file="../../components/modal.jsp"%>
 
 <section class="sub-banner">
   <div class="container">
@@ -35,7 +47,7 @@
 <div id="app-content">
   <div class="container content-wrap">
     <div class="row g-4">
-      <aside class="col-lg-3"><div id="sidebar-placeholder"></div></aside>
+      <aside class="col-lg-3"><div id="sidebar-placeholder"></div><%@ include file="../../components/sidebar.jsp"%></aside>
 
       <section class="col-lg-9">
         <!-- ==================== 결재 현황 요약 ==================== -->
@@ -163,5 +175,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 <script src="../js/common.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+<%@ include file="../../components/footer.jsp"%>

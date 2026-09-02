@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+   
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -31,6 +34,8 @@
   .msg-input { padding: .8rem; border-top: 1px solid var(--line); display: flex; gap: .5rem; }
 </style>
 </head>
+<%@ include file="../../components/header.jsp"%>
+<%@ include file="../../components/modal.jsp"%>
 <body data-page="messenger">
 
 <div id="header-placeholder"></div>
@@ -51,7 +56,7 @@
 <div id="app-content">
   <div class="container content-wrap">
     <div class="row g-4">
-      <aside class="col-lg-3"><div id="sidebar-placeholder"></div></aside>
+      <aside class="col-lg-3"><div id="sidebar-placeholder"></div><%@ include file="../../components/sidebar.jsp"%></aside>
 
       <section class="col-lg-9">
         <div class="msg-shell">
@@ -119,4 +124,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 <script src="../js/common.js"></script>
 </body>
+<%@ include file="../../components/footer.jsp"%>
 </html>

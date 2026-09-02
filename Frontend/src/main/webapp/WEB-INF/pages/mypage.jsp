@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+   
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -16,7 +19,8 @@
 <link rel="stylesheet" href="../css/responsive.css">
 </head>
 <body data-page="mypage">
-
+<%@ include file="../../components/header.jsp"%>
+<%@ include file="../../components/modal.jsp"%>
 <div id="header-placeholder"></div>
 <div id="modal-placeholder"></div>
 
@@ -35,7 +39,7 @@
 <div id="app-content">
   <div class="container content-wrap">
     <div class="row g-4">
-      <aside class="col-lg-3"><div id="sidebar-placeholder"></div></aside>
+      <aside class="col-lg-3"><div id="sidebar-placeholder"></div><%@ include file="../../components/sidebar.jsp"%></aside>
 
       <section class="col-lg-9">
         <div class="row g-4">
@@ -135,4 +139,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 <script src="../js/common.js"></script>
 </body>
+<%@ include file="../../components/footer.jsp"%>
 </html>

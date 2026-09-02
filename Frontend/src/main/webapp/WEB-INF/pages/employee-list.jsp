@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>   
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -19,7 +21,8 @@
 
 <div id="header-placeholder"></div>
 <div id="modal-placeholder"></div>
-
+<%@ include file="../../components/header.jsp"%>
+<%@ include file="../../components/modal.jsp"%>
 <section class="sub-banner">
   <div class="container">
     <h1><i class="bi bi-people"></i> 社員検索</h1>
@@ -35,7 +38,7 @@
 <div id="app-content">
   <div class="container content-wrap">
     <div class="row g-4">
-      <aside class="col-lg-3"><div id="sidebar-placeholder"></div></aside>
+      <aside class="col-lg-3"><div id="sidebar-placeholder"></div><%@ include file="../../components/sidebar.jsp"%></aside>
 
       <section class="col-lg-9">
         <!-- ==================== 검색 필터 ==================== -->
@@ -144,4 +147,5 @@
 <script src="../js/common.js"></script>
 <script src="../js/employee.js"></script>
 </body>
+<%@ include file="../../components/footer.jsp"%>
 </html>
