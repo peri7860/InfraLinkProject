@@ -1,0 +1,489 @@
+/* =========================================================================
+   common.css
+   - 사이트 전역에서 사용하는 CSS 변수, 리셋, 공통 컴포넌트 스타일
+   - Header/Footer 전용 스타일은 header.css / footer.css 로 분리
+   - 반응형 규칙은 responsive.css 에 별도로 모아둠
+   ========================================================================= */
+
+/* ==================== CSS 변수 (컬러 시스템) ==================== */
+:root {
+	--navy: #142640; /* 메인 헤더 / 타이틀 컬러 */
+	--navy-soft: #223a5e; /* 헤더 보조 컬러 */
+	--teal: #1b8a7a; /* 포인트 컬러 (강조용) */
+	--teal-dark: #146a5e; /* 포인트 컬러 (진한 톤) */
+	--teal-tint: #e6f3f1; /* 포인트 컬러 배경용 (연한 톤) */
+	--bg: #f2f4f7; /* 페이지 배경 (쿨톤 라이트 그레이) */
+	--surface: #ffffff; /* 카드/패널 배경 */
+	--ink: #1d2733; /* 기본 텍스트 컬러 */
+	--ink-soft: #647085; /* 보조 텍스트 컬러 */
+	--line: #e3e7ec; /* 구분선 컬러 */
+	--warn: #d64545; /* 경고/중요 컬러 */
+	--radius-sm: 6px;
+	--radius-md: 10px;
+	--radius-lg: 12px;
+}
+
+/* ==================== 기본 리셋 / 전역 스타일 ==================== */
+body {
+	background: var(--bg);
+	color: var(--ink);
+	/* 일본어 UI 기준 폰트 : Noto Sans JP */
+	font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic",
+		sans-serif;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Header/Footer 사이의 본문 영역이 항상 화면을 채우도록 처리 */
+#app-content {
+	flex: 1 0 auto;
+}
+
+a {
+	text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic",
+		sans-serif;
+	font-weight: 700;
+}
+
+/* ==================== 페이지 공통 레이아웃 ==================== */
+.content-wrap {
+	padding: 2.4rem 0 3.5rem;
+}
+
+/* 페이지 상단 타이틀 영역 (모든 하위 페이지 공통) */
+.page-header {
+	margin-bottom: 1.6rem;
+}
+
+.page-header h1 {
+	font-size: 1.5rem;
+	color: var(--navy);
+	margin-bottom: 0.3rem;
+}
+
+.page-header .breadcrumb {
+	font-size: 0.82rem;
+	color: var(--ink-soft);
+	margin-bottom: 0;
+	background: transparent;
+	padding: 0;
+}
+
+.page-header .breadcrumb-item.active {
+	color: var(--teal-dark);
+	font-weight: 600;
+}
+
+.page-header .breadcrumb-item+.breadcrumb-item::before {
+	color: #b7c1cf;
+}
+
+/* ==================== 패널(카드) 공통 스타일 ==================== */
+.panel {
+	background: var(--surface);
+	border: 1px solid var(--line);
+	border-radius: var(--radius-md);
+}
+
+.panel-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 1.1rem 1.3rem;
+	border-bottom: 1px solid var(--line);
+	flex-wrap: wrap;
+	gap: 0.6rem;
+}
+
+.panel-header h5 {
+	margin: 0;
+	font-size: 1.02rem;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.panel-header h5 i {
+	color: var(--teal-dark);
+}
+
+.panel-header a.panel-link {
+	font-size: 0.82rem;
+	color: var(--ink-soft);
+	font-weight: 600;
+}
+
+.panel-header a.panel-link:hover {
+	color: var(--teal-dark);
+}
+
+.panel-body {
+	padding: 1.3rem;
+}
+
+.widget+.widget {
+	margin-top: 1.4rem;
+}
+
+/* ==================== 버튼 (포인트 컬러) ==================== */
+.btn-teal {
+	background: var(--teal);
+	border-color: var(--teal);
+	color: #fff;
+	font-weight: 600;
+}
+
+.btn-teal:hover {
+	background: var(--teal-dark);
+	border-color: var(--teal-dark);
+	color: #fff;
+}
+
+.btn-outline-teal {
+	border-color: var(--teal);
+	color: var(--teal-dark);
+	font-weight: 600;
+	background: transparent;
+}
+
+.btn-outline-teal:hover {
+	background: var(--teal);
+	color: #fff;
+}
+
+.btn-navy {
+	background: var(--navy);
+	border-color: var(--navy);
+	color: #fff;
+	font-weight: 600;
+}
+
+.btn-navy:hover {
+	background: var(--navy-soft);
+	border-color: var(--navy-soft);
+	color: #fff;
+}
+
+/* ==================== 배지 / 상태 표시 ==================== */
+.badge-fixed {
+	background: var(--warn);
+	color: #fff;
+	font-size: 0.7rem;
+	font-weight: 700;
+	padding: 0.3rem 0.5rem;
+}
+
+.badge-normal {
+	background: #eef1f4;
+	color: var(--ink-soft);
+	font-size: 0.7rem;
+	font-weight: 700;
+	padding: 0.3rem 0.5rem;
+}
+
+.status-pill {
+	font-size: 0.72rem;
+	font-weight: 700;
+	padding: 0.2rem 0.55rem;
+	border-radius: 20px;
+	display: inline-block;
+}
+
+.status-wait {
+	background: #fff3d6;
+	color: #9a6b00;
+} /* 대기중 */
+.status-progress {
+	background: #e1eeff;
+	color: #1d5fc2;
+} /* 진행중 */
+.status-done {
+	background: #e4f3ea;
+	color: #1e7b45;
+} /* 완료/승인 */
+.status-reject {
+	background: #fbe4e4;
+	color: #b23b3b;
+} /* 반려 */
+.status-late {
+	background: #fbe4e4;
+	color: #b23b3b;
+} /* 지각/이상 */
+.status-normal {
+	background: #e4f3ea;
+	color: #1e7b45;
+} /* 정상 */
+
+/* ==================== 리스트형 테이블 (공지/게시판 공통) ==================== */
+.list-table {
+	margin-bottom: 0;
+}
+
+.list-table th {
+	background: #f7f9fa;
+	font-size: 0.82rem;
+	color: var(--ink-soft);
+	font-weight: 700;
+	border-bottom: 1px solid var(--line);
+	white-space: nowrap;
+}
+
+.list-table td {
+	font-size: 0.88rem;
+	vertical-align: middle;
+	border-bottom: 1px solid var(--line);
+}
+
+.list-table tr:last-child td {
+	border-bottom: none;
+}
+
+.list-table .title-link {
+	color: var(--ink);
+	font-weight: 500;
+}
+
+.list-table .title-link:hover {
+	color: var(--teal-dark);
+}
+
+.list-table .count-reply {
+	color: var(--teal-dark);
+	font-weight: 700;
+	font-size: 0.78rem;
+	margin-left: 0.3rem;
+}
+
+/* ==================== 검색/필터 바 ==================== */
+.filter-bar {
+	background: var(--surface);
+	border: 1px solid var(--line);
+	border-radius: var(--radius-md);
+	padding: 1rem 1.2rem;
+	margin-bottom: 1.2rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+	align-items: center;
+}
+
+/* ==================== 페이지네이션 ==================== */
+.pagination-wrap {
+	display: flex;
+	justify-content: center;
+	margin-top: 1.6rem;
+}
+
+.pagination .page-link {
+	color: var(--ink-soft);
+	font-size: 0.86rem;
+}
+
+.pagination .page-item.active .page-link {
+	background: var(--teal);
+	border-color: var(--teal);
+	color: #fff;
+}
+
+/* ==================== 상세보기 공통 스타일 (공지/게시판 상세) ==================== */
+.view-header {
+	padding: 1.4rem 1.5rem 1.1rem;
+	border-bottom: 1px solid var(--line);
+}
+
+.view-header h2 {
+	font-size: 1.25rem;
+	margin-bottom: 0.7rem;
+}
+
+.view-meta {
+	font-size: 0.83rem;
+	color: var(--ink-soft);
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.view-body {
+	padding: 1.8rem 1.5rem;
+	min-height: 220px;
+	font-size: 0.92rem;
+	line-height: 1.9;
+	color: var(--ink);
+}
+
+.view-footer {
+	padding: 1rem 1.5rem;
+	border-top: 1px solid var(--line);
+	display: flex;
+	justify-content: space-between;
+}
+
+/* ==================== 폼(작성/입력) 공통 스타일 ==================== */
+.form-panel {
+	padding: 1.6rem 1.6rem 1.9rem;
+}
+
+.form-panel .form-label {
+	font-weight: 600;
+	font-size: 0.87rem;
+	color: var(--ink);
+}
+
+.form-panel .form-text-desc {
+	font-size: 0.78rem;
+	color: var(--ink-soft);
+}
+
+.form-actions {
+	display: flex;
+	justify-content: center;
+	gap: 0.6rem;
+	margin-top: 1.6rem;
+}
+
+/* ==================== 로그인 페이지 전용 레이아웃 ==================== */
+.login-wrap {
+	flex: 1 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft)
+		100%);
+	padding: 3rem 1rem;
+}
+
+.login-card {
+	background: var(--surface);
+	border-radius: var(--radius-lg);
+	padding: 2.6rem 2.4rem;
+	width: 100%;
+	max-width: 420px;
+	box-shadow: 0 20px 45px rgba(10, 20, 40, 0.35);
+}
+
+.login-card .logo {
+	font-weight: 800;
+	font-size: 1.6rem;
+	color: var(--navy);
+	text-align: center;
+	display: block;
+	margin-bottom: 0.3rem;
+}
+
+.login-card .logo span {
+	color: var(--teal);
+}
+
+.login-card .login-sub {
+	text-align: center;
+	color: var(--ink-soft);
+	font-size: 0.85rem;
+	margin-bottom: 1.8rem;
+}
+
+/* ==================== 캘린더 위젯 (일정) ==================== */
+.cal-widget {
+	padding: 1rem 1.3rem 1.2rem;
+}
+
+.cal-item {
+	display: flex;
+	gap: 0.7rem;
+	align-items: flex-start;
+	padding: 0.5rem 0;
+	font-size: 0.85rem;
+}
+
+.cal-date {
+	background: var(--navy);
+	color: #fff;
+	border-radius: 6px;
+	min-width: 46px;
+	text-align: center;
+	padding: 0.25rem 0;
+	font-weight: 700;
+	font-size: 0.78rem;
+	flex-shrink: 0;
+}
+
+/* ==================== 조직도 / 사원 카드 ==================== */
+.employee-card {
+	border: 1px solid var(--line);
+	border-radius: var(--radius-md);
+	padding: 1.1rem;
+	text-align: center;
+	background: var(--surface);
+	height: 100%;
+}
+
+.employee-card .avatar {
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+	background: var(--teal-tint);
+	color: var(--teal-dark);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.5rem;
+	margin: 0 auto 0.7rem;
+}
+
+.employee-card .emp-name {
+	font-weight: 700;
+	font-size: 0.95rem;
+}
+
+.employee-card .emp-role {
+	font-size: 0.78rem;
+	color: var(--ink-soft);
+}
+
+/* ==================== 서브페이지 사이드바 메뉴 ==================== */
+.sidebar-menu .list-group-item {
+	border: none;
+	border-bottom: 1px solid var(--line);
+	font-size: 0.88rem;
+	font-weight: 500;
+	color: var(--ink);
+	padding: 0.8rem 1.3rem;
+}
+
+.sidebar-menu .list-group-item:last-child {
+	border-bottom: none;
+}
+
+.sidebar-menu .list-group-item:hover {
+	background: var(--teal-tint);
+	color: var(--teal-dark);
+}
+
+.sidebar-menu .list-group-item.active {
+	background: var(--teal-tint);
+	color: var(--teal-dark);
+	font-weight: 700;
+	border-right: 3px solid var(--teal);
+}
+
+/* ==================== 유틸리티 ==================== */
+.text-teal {
+	color: var(--teal-dark);
+}
+
+.bg-teal-tint {
+	background: var(--teal-tint);
+}
+
+.section-title {
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: var(--navy);
+	margin-bottom: 1rem;
+}
