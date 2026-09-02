@@ -1,1 +1,8 @@
-/build/
+# Keep this repository backend-only.
+# Every file is ignored unless it is Java source under src/main/java.
+*
+!.gitignore
+!src/
+!src/main/
+!src/main/java/
+!src/main/java/**
