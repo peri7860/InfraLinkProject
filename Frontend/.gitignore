@@ -1,1 +1,27 @@
-/build/
+# 1. 모든 파일과 폴더를 추적 대상에서 제외
+*
+
+# 2. .gitignore 파일 유지
+!.gitignore
+
+# 3. 목표 폴더로 가는 상위 경로
+!/src/
+!/src/main/
+!/src/main/webapp/
+!/src/main/webapp/WEB-INF/
+
+# 4. 깃허브에 남겨둘 프론트엔드 폴더 및 내부 파일 유지
+!/src/main/webapp/WEB-INF/assets/
+!/src/main/webapp/WEB-INF/assets/**
+
+!/src/main/webapp/WEB-INF/components/
+!/src/main/webapp/WEB-INF/components/**
+
+!/src/main/webapp/WEB-INF/pages/
+!/src/main/webapp/WEB-INF/pages/**
+
+!/src/main/webapp/css/
+!/src/main/webapp/css/**
+
+!/src/main/webapp/js/
+!/src/main/webapp/js/**
