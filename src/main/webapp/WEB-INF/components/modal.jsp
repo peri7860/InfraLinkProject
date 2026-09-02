@@ -15,49 +15,49 @@
       <div class="modal-body">
         <div class="row row-cols-3 row-cols-md-4 g-3">
           <div class="col">
-            <a href="../pages/approval.jsp" class="quick-btn">
+            <a href="${pageContext.request.contextPath}/pages/approval.do" class="quick-btn">
               <div class="icon-wrap"><i class="bi bi-file-earmark-check"></i></div>
               <span>電子決裁</span>
             </a>
           </div>
           <div class="col">
-            <a href="../pages/attendance.jsp" class="quick-btn">
+            <a href="${pageContext.request.contextPath}/pages/attendance.do" class="quick-btn">
               <div class="icon-wrap"><i class="bi bi-clock-history"></i></div>
               <span>勤怠管理</span>
             </a>
           </div>
           <div class="col">
-            <a href="../pages/room-reserve.jsp" class="quick-btn">
+            <a href="${pageContext.request.contextPath}/pages/room.do" class="quick-btn">
               <div class="icon-wrap"><i class="bi bi-door-open"></i></div>
               <span>会議室予約</span>
             </a>
           </div>
           <div class="col">
-            <a href="../pages/schedule.jsp" class="quick-btn">
+            <a href="${pageContext.request.contextPath}/pages/schedule.do" class="quick-btn">
               <div class="icon-wrap"><i class="bi bi-calendar3"></i></div>
               <span>スケジュール</span>
             </a>
           </div>
           <div class="col">
-            <a href="../pages/employee-list.jsp" class="quick-btn">
+            <a href="${pageContext.request.contextPath}/pages/employee.do" class="quick-btn">
               <div class="icon-wrap"><i class="bi bi-diagram-3"></i></div>
               <span>組織図</span>
             </a>
           </div>
           <div class="col">
-            <a href="../pages/board-list.jsp" class="quick-btn">
+            <a href="${pageContext.request.contextPath}/pages/board.do" class="quick-btn">
               <div class="icon-wrap"><i class="bi bi-clipboard2-data"></i></div>
               <span>掲示板</span>
             </a>
           </div>
           <div class="col">
-            <a href="../pages/messenger.jsp" class="quick-btn">
+            <a href="${pageContext.request.contextPath}/pages/messenger.do" class="quick-btn">
               <div class="icon-wrap"><i class="bi bi-chat-dots"></i></div>
               <span>メッセンジャー</span>
             </a>
           </div>
           <div class="col">
-            <a href="../pages/mypage.jsp" class="quick-btn">
+            <a href="${pageContext.request.contextPath}/pages/mypage.do" class="quick-btn">
               <div class="icon-wrap"><i class="bi bi-person-gear"></i></div>
               <span>マイページ</span>
             </a>

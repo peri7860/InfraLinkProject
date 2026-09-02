@@ -1,30 +1,60 @@
 /**
  * ==========================================================================
  * common.js
- * - JSP의 <jsp:include>로 공통 헤더·사이드바·푸터·모달을 렌더링한 뒤,
- *   현재 화면에 맞는 메뉴만 active 상태로 표시한다.
+ * - 모든 페이지에서 공통으로 사용하는 JavaScript
+ * - 공통 메뉴 active 처리
+ * - Bootstrap 공통 기능 초기화
  * ==========================================================================
  */
 
-(function () {
-  "use strict";
+(function() {
 
-  /**
-   * 현재 페이지에 해당하는 네비게이션 링크에 active 클래스를 부여한다.
-   * body 태그의 data-page 속성 값(예: data-page="notice")과
-   * 각 링크의 data-nav-match 속성을 비교한다.
-   */
-  function markActiveNav() {
-    var current = document.body.getAttribute("data-page");
-    if (!current) return;
-    document.querySelectorAll("[data-nav-match]").forEach(function (el) {
-      if (el.getAttribute("data-nav-match") === current) {
-        el.classList.add("active");
-      }
-    });
-  }
+	"use strict";
 
-  document.addEventListener("DOMContentLoaded", markActiveNav);
+	document.addEventListener("DOMContentLoaded", function() {
 
-  window.IntranetCommon = { markActiveNav: markActiveNav };
+		// ==================== Bootstrap 툴팁 초기화 ====================
+
+		var tooltipTriggerList =
+			document.querySelectorAll('[data-bs-toggle="tooltip"]');
+
+		tooltipTriggerList.forEach(function(el) {
+			new bootstrap.Tooltip(el);
+		});
+
+
+		// ==================== 현재 메뉴 Active 처리 ====================
+
+		markActiveNav();
+
+	});
+
+
+	/**
+	 * 현재 페이지에 해당하는 메뉴에 active 클래스 추가
+	 *
+	 * body의 data-page와
+	 * 메뉴의 data-nav-match를 비교한다.
+	 */
+	function markActiveNav() {
+
+		var current =
+			document.body.getAttribute("data-page");
+
+		if (!current) return;
+
+
+		document.querySelectorAll("[data-nav-match]")
+			.forEach(function(el) {
+
+				if (el.getAttribute("data-nav-match") === current) {
+
+					el.classList.add("active");
+
+				}
+
+			});
+
+	}
+
 })();

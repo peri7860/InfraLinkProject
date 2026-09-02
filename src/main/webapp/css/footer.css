@@ -2,45 +2,30 @@
    footer.css
    - components/footer.html 에 대응하는 스타일
    ========================================================================= */
+
 footer.site-footer {
-	background: var(--navy);
-	color: #b7c1cf;
-	padding: 2.2rem 0 1.2rem;
-	margin-top: 2rem;
-	flex-shrink: 0;
+  background: var(--navy);
+  color: #b7c1cf;
+  padding: 2.2rem 0 1.2rem;
+  margin-top: 2rem;
+  flex-shrink: 0;
 }
-
 footer.site-footer .footer-logo {
-	font-weight: 800;
-	font-size: 1.2rem;
-	color: #fff;
-	margin-bottom: 0.7rem;
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: #fff;
+  margin-bottom: 0.7rem;
 }
-
-footer.site-footer .footer-logo span {
-	color: var(--teal);
-}
-
+footer.site-footer .footer-logo span { color: var(--teal); }
 footer.site-footer .footer-info {
-	font-size: 0.83rem;
-	line-height: 1.9;
-	color: #9aa6b5;
+  font-size: 0.83rem;
+  line-height: 1.9;
+  color: #9aa6b5;
 }
-
-footer.site-footer .footer-info strong {
-	color: #d7dee7;
-	font-weight: 600;
-}
-
-footer.site-footer h6 {
-	font-size: 0.9rem;
-}
-
-footer.site-footer hr {
-	border-color: rgba(255, 255, 255, 0.12);
-}
-
+footer.site-footer .footer-info strong { color: #d7dee7; font-weight: 600; }
+footer.site-footer h6 { font-size: 0.9rem; }
+footer.site-footer hr { border-color: rgba(255, 255, 255, 0.12); }
 footer.site-footer .copyright {
-	font-size: 0.78rem;
-	color: #8290a1;
+  font-size: 0.78rem;
+  color: #8290a1;
 }

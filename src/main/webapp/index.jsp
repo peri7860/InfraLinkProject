@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -24,13 +25,9 @@
 </head>
 <!-- data-page="home" : common.js 가 현재 메뉴를 표시할 때 사용 (메인은 대상 메뉴 없음) -->
 <body data-page="index">
-<%@ include file="../components/header.jsp"%>
-<%@ include file="../components/modal.jsp"%>
-<!-- ==================== Header (components/header.html 을 JS로 삽입) ==================== -->
-<div id="header-placeholder"></div>
+<%@ include file="WEB-INF/components/header.jsp" %>
 
-<!-- ==================== 공통 모달 (クイックメニュー 등) ==================== -->
-<div id="modal-placeholder"></div>
+<%@ include file="WEB-INF/components/modal.jsp" %>
 
 <!-- ==================== 메인비주얼 : 퀵메뉴 ==================== -->
 <section class="quick-section">
@@ -41,37 +38,37 @@
     </div>
     <div class="row row-cols-3 row-cols-md-4 row-cols-lg-6 g-3">
       <div class="col">
-        <a href="../pages/attendance.jsp" class="quick-btn">
+        <a href="${pageContext.request.contextPath}/pages/attendance.do" class="quick-btn">
           <div class="icon-wrap"><i class="bi bi-clock-history"></i></div>
           <span>勤怠管理</span>
         </a>
       </div>
       <div class="col">
-        <a href="../pages/approval.jsp" class="quick-btn">
+        <a href="${pageContext.request.contextPath}/pages/approval.do" class="quick-btn">
           <div class="icon-wrap"><i class="bi bi-file-earmark-check"></i></div>
           <span>電子決裁</span>
         </a>
       </div>
       <div class="col">
-        <a href="../pages/employee-list.jsp" class="quick-btn">
+        <a href="${pageContext.request.contextPath}/pages/employee.do" class="quick-btn">
           <div class="icon-wrap"><i class="bi bi-diagram-3"></i></div>
           <span>組織図</span>
         </a>
       </div>
       <div class="col">
-        <a href="../pages/room-reserve.jsp" class="quick-btn">
+        <a href="${pageContext.request.contextPath}/pages/room.do" class="quick-btn">
           <div class="icon-wrap"><i class="bi bi-door-open"></i></div>
           <span>会議室予約</span>
         </a>
       </div>
       <div class="col">
-        <a href="../pages/schedule.jsp" class="quick-btn">
+        <a href="${pageContext.request.contextPath}/pages/schedule.do" class="quick-btn">
           <div class="icon-wrap"><i class="bi bi-calendar3"></i></div>
           <span>スケジュール</span>
         </a>
       </div>
       <div class="col">
-        <a href="../pages/messenger.jsp" class="quick-btn">
+        <a href="${pageContext.request.contextPath}/pages/messenger.do" class="quick-btn">
           <div class="icon-wrap"><i class="bi bi-chat-dots"></i></div>
           <span>メッセンジャー</span>
         </a>
@@ -90,7 +87,7 @@
         <div class="panel mb-4">
           <div class="panel-header">
             <h5><i class="bi bi-megaphone"></i> お知らせ</h5>
-            <a href="../pages/notice-list.jsp" class="panel-link">すべて見る <i class="bi bi-chevron-right"></i></a>
+            <a href="${pageContext.request.contextPath}/pages/notice.do" class="panel-link">すべて見る <i class="bi bi-chevron-right"></i></a>
           </div>
           <div class="table-scroll">
             <table class="table list-table mb-0">
@@ -222,14 +219,13 @@
 </div>
 
 <!-- ==================== Footer (components/footer.html 을 JS로 삽입) ==================== -->
-<div id="footer-placeholder"></div>
-
+<%@ include file="/WEB-INF/components/footer.jsp" %>
 <!-- Bootstrap 5 JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 <!-- 공통 컴포넌트 로더 -->
-<script src="js/common.js"></script>
+<script src="${pageContext.request.contextPath}/js/common.js"></script>
 <!-- 메인 페이지 전용 스크립트 -->
-<script src="js/main.js"></script>
+<script src="${pageContext.request.contextPath}/js/main.js"></script>
 </body>
-<%@ include file="../components/footer.jsp"%>
+
 </html>
