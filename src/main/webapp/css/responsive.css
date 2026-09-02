@@ -1,0 +1,73 @@
+/* =========================================================================
+   responsive.css
+   - PC 우선 설계 후 태블릿 / 모바일 대응 미디어쿼리 모음
+   ========================================================================= */
+
+/* ==================== 태블릿 (~991.98px) ==================== */
+@media ( max-width : 991.98px) {
+	.quick-section {
+		padding: 1.8rem 0 2.4rem;
+	}
+	.quick-section h2 {
+		font-size: 1.15rem;
+	}
+	.top-util .container {
+		justify-content: center;
+	}
+
+	/* 모바일 메뉴 펼쳤을 때 배경을 헤더 톤과 맞춤 */
+	.main-nav {
+		background: var(--navy-soft);
+		border-radius: 8px;
+		padding: 0.6rem;
+		margin-top: 0.6rem;
+	}
+	.content-wrap {
+		padding: 1.8rem 0 2.6rem;
+	}
+}
+
+/* ==================== 모바일 (~575.98px) ==================== */
+@media ( max-width : 575.98px) {
+	.logo {
+		font-size: 1.2rem;
+	}
+	.quick-btn {
+		padding: 1rem 0.6rem;
+	}
+	.quick-btn .icon-wrap {
+		width: 42px;
+		height: 42px;
+		font-size: 1.15rem;
+	}
+	.quick-btn span {
+		font-size: 0.78rem;
+	}
+	.panel-header {
+		padding: 0.9rem 1rem;
+	}
+	.panel-body, .form-panel, .view-body {
+		padding: 1.1rem;
+	}
+	.login-card {
+		padding: 2rem 1.5rem;
+	}
+	.view-footer {
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+	.view-footer .btn {
+		width: 100%;
+	}
+	footer.site-footer .row>div {
+		text-align: center;
+	}
+}
+
+/* 표(list-table)를 모바일에서 가로 스크롤 처리하기 위한 래퍼 */
+@media ( max-width : 767.98px) {
+	.table-scroll {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+}
