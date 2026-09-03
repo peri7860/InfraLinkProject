@@ -12,6 +12,14 @@ public class NoticeDTO {
 	private String pin_yn;
 	private String reg_date;
 	
+	private String visibility;
+	
+	public String getVisibility() {
+		return visibility;
+	}
+	public void setVisibility(String visibility) {
+		this.visibility = visibility;
+	}
 	public int getNotice_no() {
 		return notice_no;
 	}
