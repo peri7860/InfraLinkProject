@@ -38,6 +38,9 @@ public class pages extends HttpServlet {
             case "/approval.do":
                 page = "/WEB-INF/pages/approval.jsp"; // 프로젝트 폴더 구조에 맞게 경로 수정
                 break;
+            case "/approval-write.do":
+                page = "/WEB-INF/pages/approval-write.jsp";
+                break;
             case "/attendance.do":
                 page = "/WEB-INF/pages/attendance.jsp";
                 break;

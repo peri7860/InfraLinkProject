@@ -32,23 +32,20 @@ public class DBManager {
 	
 	
 	
-	public static void close(Connection conn, PreparedStatement pstmt) {
-		
+	public static void close(PreparedStatement pstmt, Connection conn) {
 		try {
-			if(conn != null)conn.close();
-			if(pstmt != null)pstmt.close();
+			if(pstmt != null) pstmt.close();
+			if(conn != null) conn.close();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	
-public static void close(Connection conn, PreparedStatement pstmt, ResultSet rs) {
-		
+	public static void close(ResultSet rs, PreparedStatement pstmt, Connection conn) {
 		try {
-			if(conn != null)conn.close();
-			if(pstmt != null)pstmt.close();
 			if(rs != null)rs.close();
+			if(pstmt != null) pstmt.close();
+			if(conn != null) conn.close();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
