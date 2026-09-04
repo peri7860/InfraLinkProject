@@ -5,15 +5,24 @@ public class EmployeeDTO {
 	private String employee_id;
 	private String password;
 	private String emp_name;
+	private String dept_code;
 	private String dept_name;
 	private String position;
 	private String email;
 	private String ext_no;
 	private String hire_date;
 	private String emp_status;
-	
+
 	// 관리자와 일반 사원 구분
 	private String auth_role; // "ADMIN" or "USER"
+
+	public String getDept_code() {
+		return dept_code;
+	}
+
+	public void setDept_code(String dept_code) {
+		this.dept_code = dept_code;
+	}
 
 	public String getAuth_role() {
 		return auth_role;
