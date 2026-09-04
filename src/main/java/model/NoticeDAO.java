@@ -19,7 +19,7 @@ public class NoticeDAO {
 		//구분,타이틀,작성자,등록일
 		
 		String sql = "insert into notice (notice_no,category,employee_id,visibility,title,content,file_path)"
-				+ "values (notice_seq.nextval,?,?,?,?,?)";
+				+ "values (notice_seq.nextval,?,?,?,?,?,?)";
 		
 		try {
 			conn = DBManager.getInstance();
