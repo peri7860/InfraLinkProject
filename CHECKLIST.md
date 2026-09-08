@@ -36,15 +36,15 @@
 - [x] 사원 수정 (`EmployeeUpdateService` **신규** — 기존엔 수정이 신규 INSERT 였음)
 - [x] 사원 편집 폼 데이터 바인딩 (`EmployeeEditService` 재작성)
 - [x] `login.jsp` 실제 폼으로 교체 (POST · name 속성 · 오류 메시지)
-- [ ] 나머지 JSP 연결 (mypage.jsp, notice-write.jsp 폼 · JS 수정)
+- [x] 나머지 JSP 연결 (mypage.jsp, notice-write.jsp 폼 · JS 수정)
 
 ## C. 라우팅 / 링크
 
 - [x] `admin-approval-rules.do` 라우트 누락 (404) — 2곳
-- [ ] `board-*.jsp` 의 `.html` 링크 7곳
-- [ ] `index.jsp:214` 검색 폼 action (`/pages/employee-list.html`)
-- [ ] `notice-view.do` 링크 15곳에 `?no=` 파라미터 추가
-- [ ] JSP 31개의 `../css/` 상대경로 → `${pageContext.request.contextPath}` 통일
+- [x] `board-*.jsp` 의 `.html` 링크 7곳
+- [x] `index.jsp` 검색 폼 action (`/pages/employee-list.html`)
+- [x] `notice-view.do` 링크 15곳에 `?no=` 파라미터 추가
+- [x] JSP 전체의 `../css/` 상대경로 → `${pageContext.request.contextPath}` 통일
 
 ## D. 로그인 / 권한 / 보안
 
@@ -52,7 +52,7 @@
 - [x] `AdminFilter` — `auth_role=ADMIN` 확인
 - [x] 세션 고정 공격 방어 (로그인 시 세션 재발급 — `RequestUtil.setLoginUser`)
 - [x] 세션에 비밀번호 해시를 넣지 않도록 제거
-- [ ] XSS — EL 출력을 `<c:out>` 로 이스케이프
+- [x] XSS — 사용자 입력 출력에 `<c:out>` 적용
 - [x] DB 계정 하드코딩 제거 → `db.properties` 외부화 (`AppConfig`)
 - [x] 업로드 경로 하드코딩(`C:\upload2`) 제거 + 확장자 화이트리스트 + 용량 제한 (`FileUtil`)
 - [x] 첨부파일 다운로드 시 경로 조작 차단 (파일명 대신 글번호로 조회 — `FileDownloadService`)
@@ -66,7 +66,7 @@
 - [x] `db.properties` / `db.properties.sample` 분리
 - [x] DB 스키마 `db/01_schema.sql` (테이블 11개 + 시퀀스 9개)
 - [x] 샘플 데이터 `db/02_sample_data.sql` (실제 BCrypt 해시 포함)
-- [ ] `README.md` (설치·실행 순서)
+- [x] `README.md` (설치·실행 순서)
 - [x] 스냅샷 커밋 (로컬 브랜치 `backend-refactor-20260907`, 푸시 안 함)
 
 ## F. 코드 품질
@@ -81,12 +81,12 @@
 
 ## G. 화면 (JSP / JS)
 
-- [ ] `footer.jsp` 가 `</body>` 뒤에 include 된 페이지 16개 수정
+- [x] `footer.jsp` 가 `</body>` 뒤에 include 된 페이지 수정 (33개)
 - [x] `header.jsp` — 세션 사용자 표시 · 로그아웃 링크 연결 · 알림 배지 하드코딩 제거
-- [ ] `schedule-write.jsp` 3줄 압축 포맷 정리
+- [x] `schedule-write.jsp` 3줄 압축 포맷 정리
 - [x] 에러 페이지 4종 신규 (`error-400/403/404/500.jsp`)
 - [x] `system-status.jsp` 신규
-- [ ] 각 목록/상세 화면 DB 연동 (공지·게시판·결재·일정·회의실·근태·알림·사원)
+- [x] 각 목록/상세 화면 DB 연동 (공지·게시판·결재·일정·회의실·근태·알림·사원·메인·대시보드)
 
 ---
 
@@ -94,44 +94,53 @@
 
 | 모듈 | DTO | DAO | Service | JSP 연결 |
 |---|---|---|---|---|
-| 사원 (검색·수정·퇴사·비밀번호초기화) | [x] | [x] | [x] | [ ] |
-| 공지사항 (목록·상세·작성·수정·삭제·다운로드) | [x] | [x] | [x] | [ ] |
-| 자유게시판 + 댓글 | [x] | [x] | [x] | [ ] |
-| 전자결재 (기안·승인·반려·회수) | [x] | [x] | [x] | [ ] |
-| 일정 (월간·상세·등록·수정·삭제) | [x] | [x] | [x] | [ ] |
-| 회의실 예약 (중복검사 포함) | [x] | [x] | [x] | [ ] |
-| 근태 (출퇴근·월간통계) | [x] | [x] | [x] | [ ] |
-| 알림 (DB 기반 읽음처리) | [x] | [x] | [x] | [ ] |
-| 부서 / 회의실 마스터 | [x] | [x] | — | [ ] |
-| 관리자 대시보드 통계 | — | [x] | [x] | [ ] |
+| 사원 (검색·수정·퇴사·비밀번호초기화) | [x] | [x] | [x] | [x] |
+| 공지사항 (목록·상세·작성·수정·삭제·다운로드) | [x] | [x] | [x] | [x] |
+| 자유게시판 + 댓글 | [x] | [x] | [x] | [x] |
+| 전자결재 (기안·승인·반려·회수) | [x] | [x] | [x] | [x] |
+| 일정 (월간·상세·등록·수정·삭제) | [x] | [x] | [x] | [x] |
+| 회의실 예약 (중복검사 포함) | [x] | [x] | [x] | [x] |
+| 근태 (출퇴근·월간통계) | [x] | [x] | [x] | [x] |
+| 알림 (DB 기반 읽음처리) | [x] | [x] | [x] | [x] |
+| 부서 / 회의실 마스터 | [x] | [x] | — | [x] |
+| 관리자 대시보드 통계 | — | [x] | [x] | [x] |
 | 메신저 | 미구현 (WebSocket 필요 — 범위 밖으로 판단) | | | |
 
 ---
 
 ---
 
-## 진행률 (2026-09-07 · 컨트롤러 + 필터 작업 후)
+## 진행률 (2026-09-07 최종)
 
 | 계층 | 상태 |
 |---|---|
 | 설정 · DB 스키마 | 완료 |
 | util 공통 | 7 / 7 |
 | model DTO · DAO | 21 / 21 |
-| service | **48 / 48 완료** |
-| **controller · filter** | **완료** — 라우트 52개(Command 35 · View 17) · 필터 3개 |
-| JSP · JS | 7 / 42 |
+| service | 48 / 48 |
+| controller · filter | 완료 — 라우트 57개(Command 47 · View 10) · 필터 3개 |
+| JSP · JS | 43 / 43 |
 
 ### 검증 결과
 
-- Java 소스 : **69개 / 10,120줄** (원본 23개 / 1,691줄)
 - Java 컴파일 : 통과 (`javac -Xlint:all` 무경고)
-- **JSP 컴파일 : 42 / 42 통과** (Tomcat `JspC -compile` 로 실제 서블릿 생성까지 확인)
-- `web.xml` : well-formed + jsp-config 요소 순서(XSD sequence) 수정 완료
-- 라우트 교차검증 : 화면이 참조하는 `.do` 경로 중 미등록 **0건**, 미연결 서비스 **0건**
+- **JSP 컴파일 : 43 / 43 통과** (Tomcat `JspC -compile` 로 서블릿 생성까지 확인)
+- `web.xml` : well-formed + jsp-config 요소 순서(XSD sequence) 정상
+- 라우트 교차검증 : 화면이 참조하는 `.do` 경로 중 미등록 0건, 미연결 서비스 0건
+- 하드코딩 더미 데이터 : 전 화면에서 제거 (남은 것은 수정 이력 주석뿐)
 
-### 남은 큰 덩어리
+### 의도적으로 남긴 것
 
-1. 서비스 12개 (회의실 4 · 근태 2 · 알림 2 · 일정 2 · 대시보드 1 · 메인 1)
-2. JSP 35개 — 하드코딩 데이터를 DB 연동으로 교체
-3. JS 5개 — `preventDefault()` 로 막아둔 더미 제출 로직 제거
-4. `README.md` · 첫 커밋
+| 항목 | 이유 |
+|---|---|
+| 메신저 | 실시간 통신(WebSocket) 서버가 필요 — 범위 밖으로 합의 |
+| 관리자 활동 로그 | 감사 로그 테이블 미설계. 화면만 유지 |
+| 역할/결재 규칙 관리 | `auth_role` 2단계(USER/ADMIN)로 운영 중. 화면만 유지 |
+| 패키지명 `controler` 오타 | 사용자 결정 — 이름을 바꾸면 옛 .class 와 `@WebServlet("/")` 매핑이 충돌해 톰캣이 뜨지 않을 위험 |
+
+### 이 브랜치에 대해
+
+로컬 브랜치 `backend-refactor-20260907` 에만 커밋되어 있고 **푸시하지 않았다.**
+`origin/Backend` 에는 팀원(SEOKWON · SEONGSIK-OH)이 올린 커밋이 따로 있고
+로그아웃 · 마이페이지 · 공지 서비스 등 겹치는 부분이 있다.
+병합 방침을 정한 뒤에 진행해야 한다.
