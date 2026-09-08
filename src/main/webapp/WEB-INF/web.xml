@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  =====================================================================
+  InfraLink 배포 서술자 (web.xml)
+
+  [신규 생성] 2026-09-07
+    기존에는 web.xml 이 아예 없어서 아래 항목을 설정할 자리가 없었다.
+      · welcome-file (첫 화면)
+      · 에러 페이지 (404 / 500 이 톰캣 기본 스택트레이스로 노출됨)
+      · 세션 타임아웃
+      · 필터 실행 순서
+
+    서블릿 매핑은 계속 @WebServlet 애노테이션을 쓴다.
+    필터만 여기에 선언한다 (아래 2번 항목의 이유 참고).
+    metadata-complete 를 켜지 않으므로 애노테이션 스캔은 그대로 동작한다.
+
+  [주의] XML 주석 안에는 연속된 하이픈 두 개를 쓸 수 없다.
+         구분선을 하이픈으로 그으면 파싱 에러가 나서 톰캣이 뜨지 않는다.
+  =====================================================================
+-->
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <display-name>InfraLink</display-name>
+
+    <!--
+      =================================================================
+      1. 시작 페이지
+      =================================================================
+    -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!--
+      =================================================================
+      2. 필터
+
+      애노테이션(@WebFilter)이 아니라 여기에 선언하는 이유는
+      필터 실행 순서 때문이다.
+      @WebFilter 는 순서를 보장하지 않지만,
+      web.xml 의 filter-mapping 은 선언된 순서대로 실행된다.
+
+      반드시 지켜야 하는 순서
+        1) EncodingFilter : 파라미터를 처음 읽기 전에 인코딩을 지정해야 한다.
+                            한 번이라도 읽은 뒤에 지정하면 무시된다.
+        2) LoginFilter    : 로그인 여부 확인
+        3) AdminFilter    : 관리자 권한 확인 (로그인 이후에만 의미가 있다)
+      =================================================================
+    -->
+
+    <!-- (1) 문자 인코딩 : 모든 요청 -->
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>filter.EncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- (2) 로그인 확인 : 공개 경로와 정적 자원은 필터 내부에서 통과시킨다 -->
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>filter.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--
+      (3) 관리자 권한 확인
+
+      url-pattern 에 "/pages/admin-*" 같은 형태는 쓸 수 없다.
+      서블릿 스펙의 경로 매핑은 "/prefix/*" 와 "*.확장자" 두 가지뿐이다.
+      그래서 /pages/* 로 넓게 걸고, 관리자 경로인지는 필터 안에서 판별한다.
+    -->
+    <filter>
+        <filter-name>AdminFilter</filter-name>
+        <filter-class>filter.AdminFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AdminFilter</filter-name>
+        <url-pattern>/pages/*</url-pattern>
+    </filter-mapping>
+
+    <!--
+      =================================================================
+      3. 세션 설정
+
+        · 30분 미사용 시 자동 로그아웃
+        · HttpOnly : JS(document.cookie)로 세션 ID 를 훔치지 못하게 한다
+        · 개발 환경은 http 이므로 secure 는 끈다 (운영 전환 시 true)
+      =================================================================
+    -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+        <cookie-config>
+            <http-only>true</http-only>
+            <secure>false</secure>
+        </cookie-config>
+        <tracking-mode>COOKIE</tracking-mode>
+    </session-config>
+
+    <!--
+      =================================================================
+      4. 에러 페이지
+
+      톰캣 기본 오류 화면에는 스택트레이스와 서버 버전이 그대로 노출된다.
+      공격자에게 정보를 주므로 반드시 자체 페이지로 덮어써야 한다.
+      =================================================================
+    -->
+    <error-page>
+        <error-code>400</error-code>
+        <location>/WEB-INF/pages/error/error-400.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/WEB-INF/pages/error/error-403.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/pages/error/error-404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/pages/error/error-500.jsp</location>
+    </error-page>
+
+    <!-- 위 코드에 잡히지 않는 모든 예외 -->
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/WEB-INF/pages/error/error-500.jsp</location>
+    </error-page>
+
+    <!--
+      =================================================================
+      5. JSP 공통 설정
+
+        · 모든 JSP 의 기본 인코딩을 UTF-8 로 강제 (page 지시자 누락 대비)
+        · trim-directive-whitespaces : 지시자와 JSTL 태그가 남기는 빈 줄 제거
+      =================================================================
+    -->
+    <!--
+      [주의] jsp-property-group 안의 요소는 순서가 정해져 있다 (XSD sequence).
+             url-pattern > el-ignored > page-encoding > scripting-invalid >
+             is-xml > include-prelude > include-coda >
+             deferred-syntax-allowed-as-literal >
+             trim-directive-whitespaces > default-content-type >
+             buffer > error-on-undeclared-namespace
+             순서가 어긋나면 스키마 검증 오류가 난다.
+    -->
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <page-encoding>UTF-8</page-encoding>
+            <trim-directive-whitespaces>true</trim-directive-whitespaces>
+            <default-content-type>text/html</default-content-type>
+        </jsp-property-group>
+    </jsp-config>
+
+</web-app>

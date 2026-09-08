@@ -1,0 +1,40 @@
+/* =========================================================================
+   main.css
+   - index.html (메인 대시보드) 에서만 사용하는 위젯 스타일
+   ========================================================================= */
+
+/* ---------- 오늘의 식단 위젯 ---------- */
+.meal-list { padding: 1rem 1.3rem 1.2rem; }
+.meal-list .meal-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.55rem 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 0.87rem;
+}
+.meal-list .meal-item:last-child { border-bottom: none; }
+.meal-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--teal-dark);
+  background: var(--teal-tint);
+  padding: 0.18rem 0.5rem;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+}
+
+/* ---------- 전자결재 현황 위젯 ---------- */
+.approval-list { padding: 1rem 1.3rem 1.2rem; }
+.approval-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 0.87rem;
+}
+.approval-item:last-child { border-bottom: none; }
+
+/* ---------- 사원 검색 위젯 ---------- */
+.emp-search-widget { padding: 1rem 1.3rem 1.2rem; }

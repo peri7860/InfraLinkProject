@@ -1,0 +1,33 @@
+# =====================================================================
+# InfraLink DB / 파일업로드 설정
+# ---------------------------------------------------------------------
+# [신규 생성] 2026-09-07
+#   기존에는 DBManager.java 소스에 계정/비밀번호가 하드코딩되어 있었다.
+#   (Git 에 그대로 올라가면 계정 유출) → 외부 설정 파일로 분리했다.
+#
+# 위치 : src/main/java/db.properties
+#        → 빌드 시 build/classes/db.properties 로 복사되고,
+#          배포되면 WEB-INF/classes/db.properties 가 된다.
+#        → 클래스패스 루트이므로 DBManager 가 getResourceAsStream 으로 읽는다.
+#
+# 주의 : 이 파일은 .gitignore 에 등록되어 Git 에 올라가지 않는다.
+#        새로 받은 사람은 db.properties.sample 을 복사해서 값을 채운다.
+# =====================================================================
+
+# ---------------------------------------------------------------------
+# Oracle 접속 정보
+# ---------------------------------------------------------------------
+db.driver=oracle.jdbc.OracleDriver
+db.url=jdbc:oracle:thin:@localhost:1521:xe
+db.username=여기에_계정_입력
+db.password=여기에_비밀번호_입력
+
+# ---------------------------------------------------------------------
+# 파일 업로드 설정
+#   upload.dir      : 첨부파일 저장 물리 경로 (없으면 자동 생성)
+#   upload.maxSize  : 파일 1건 최대 크기 (byte). 기본 10MB
+#   upload.allowExt : 허용 확장자 (소문자, 쉼표 구분). 그 외는 업로드 거부
+# ---------------------------------------------------------------------
+upload.dir=C:/infralink-upload
+upload.maxSize=10485760
+upload.allowExt=jpg,jpeg,png,gif,bmp,pdf,doc,docx,xls,xlsx,ppt,pptx,txt,csv,zip,hwp
