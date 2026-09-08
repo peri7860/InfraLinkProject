@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="cp" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -41,26 +43,26 @@
 			<div class="row g-3 mb-4">
 				<div class="col-6 col-lg-3">
 					<div class="panel text-center py-3">
-						<div class="text-muted small">有効な社員</div>
-						<div class="fs-4 fw-bold text-teal">248</div>
+						<div class="text-muted small">在職社員</div>
+						<div class="fs-4 fw-bold text-teal">${activeEmployee}</div>
 					</div>
 				</div>
 				<div class="col-6 col-lg-3">
 					<div class="panel text-center py-3">
-						<div class="text-muted small">登録承認待ち</div>
-						<div class="fs-4 fw-bold" style="color: #9a6b00">4</div>
+						<div class="text-muted small">本日の出勤</div>
+						<div class="fs-4 fw-bold" style="color:#9a6b00">${todayCheckIn}</div>
 					</div>
 				</div>
 				<div class="col-6 col-lg-3">
 					<div class="panel text-center py-3">
-						<div class="text-muted small">権限変更待ち</div>
-						<div class="fs-4 fw-bold" style="color: #b23b3b">2</div>
+						<div class="text-muted small">決裁待ち</div>
+						<div class="fs-4 fw-bold" style="color:#b23b3b">${waitingApproval}</div>
 					</div>
 				</div>
 				<div class="col-6 col-lg-3">
 					<div class="panel text-center py-3">
-						<div class="text-muted small">有効な決裁ルール</div>
-						<div class="fs-4 fw-bold text-teal">12</div>
+						<div class="text-muted small">お知らせ / 投稿</div>
+						<div class="fs-4 fw-bold text-teal">${noticeCount} / ${boardCount}</div>
 					</div>
 				</div>
 			</div>
@@ -96,15 +98,29 @@
 							</h5>
 						</div>
 						<div class="panel-body">
-							<p class="small border-bottom pb-3 mb-3">
-								<span class="status-pill status-wait me-2">4件</span>社員登録の承認待ち
-							</p>
-							<p class="small border-bottom pb-3 mb-3">
-								<span class="status-pill status-reject me-2">2件</span>権限変更の確認待ち
-							</p>
-							<p class="small mb-0">
-								<span class="status-pill status-progress me-2">1件</span>組織変更の予約
-							</p>
+							<div class="mb-3">
+								<div class="fw-bold small mb-2">部署別 在職人数</div>
+								<c:forEach var="dept" items="${departmentList}">
+									<div class="d-flex justify-content-between small border-bottom py-1">
+										<span><c:out value="${dept.dept_name}"/></span>
+										<span class="fw-bold">${dept.emp_count}名</span>
+									</div>
+								</c:forEach>
+							</div>
+							<div>
+								<div class="fw-bold small mb-2">本日の会議室予約</div>
+								<c:forEach var="rv" items="${todayReserveList}">
+									<div class="d-flex justify-content-between small border-bottom py-1">
+										<span class="text-truncate" style="max-width:60%;">
+											<c:out value="${rv.meeting_title}"/>
+										</span>
+										<span class="text-muted"><c:out value="${rv.timeRange}"/></span>
+									</div>
+								</c:forEach>
+								<c:if test="${empty todayReserveList}">
+									<span class="text-muted small">本日の予約はありません。</span>
+								</c:if>
+							</div>
 						</div>
 					</div>
 				</div>

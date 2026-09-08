@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<c:set var="cp" value="${pageContext.request.contextPath}"/>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -106,36 +109,28 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td class="text-center"><span class="badge-fixed">重要</span></td>
-                  <td><a href="${pageContext.request.contextPath}/pages/notice-view.do" class="title-link">2026年 夏季休暇および勤務制度のご案内</a></td>
-                  <td class="text-center">人事部</td>
-                  <td class="text-center">2026.08.12</td>
-                </tr>
-                <tr>
-                  <td class="text-center"><span class="badge-fixed">重要</span></td>
-                  <td><a href="${pageContext.request.contextPath}/pages/notice-view.do" class="title-link">社内システム定期点検のお知らせ（8/16 2:00〜5:00）</a></td>
-                  <td class="text-center">IT支援部</td>
-                  <td class="text-center">2026.08.11</td>
-                </tr>
-                <tr>
-                  <td class="text-center"><span class="badge-normal">一般</span></td>
-                  <td><a href="${pageContext.request.contextPath}/pages/notice-view.do" class="title-link">第3四半期 社内サークル支援金申請のご案内</a></td>
-                  <td class="text-center">総務部</td>
-                  <td class="text-center">2026.08.10</td>
-                </tr>
-                <tr>
-                  <td class="text-center"><span class="badge-normal">一般</span></td>
-                  <td><a href="${pageContext.request.contextPath}/pages/notice-view.do" class="title-link">新入社員オリエンテーション日程のお知らせ</a></td>
-                  <td class="text-center">人事部</td>
-                  <td class="text-center">2026.08.08</td>
-                </tr>
-                <tr>
-                  <td class="text-center"><span class="badge-normal">一般</span></td>
-                  <td><a href="${pageContext.request.contextPath}/pages/notice-view.do" class="title-link">本社駐車場利用案内の変更事項</a></td>
-                  <td class="text-center">総務部</td>
-                  <td class="text-center">2026.08.07</td>
-                </tr>
+                <c:forEach var="notice" items="${latestNoticeList}">
+                  <tr>
+                    <td class="text-center">
+                      <span class="${notice.pinned ? 'badge-fixed' : 'badge-normal'}">
+                        <c:out value="${empty notice.category ? '一般' : notice.category}"/>
+                      </span>
+                    </td>
+                    <td>
+                      <a href="${cp}/pages/notice-view.do?no=${notice.notice_no}"
+                         class="title-link"><c:out value="${notice.title}"/></a>
+                    </td>
+                    <td class="text-center">
+                      <c:out value="${empty notice.dept_name ? notice.emp_name : notice.dept_name}"/>
+                    </td>
+                    <td class="text-center">${notice.reg_date}</td>
+                  </tr>
+                </c:forEach>
+                <c:if test="${empty latestNoticeList}">
+                  <tr><td colspan="4" class="text-center py-4">
+                    <span class="text-muted small">お知らせはありません。</span>
+                  </td></tr>
+                </c:if>
               </tbody>
             </table>
           </div>
@@ -148,18 +143,28 @@
             <a href="${pageContext.request.contextPath}/pages/schedule.do" class="panel-link">すべて見る <i class="bi bi-chevron-right"></i></a>
           </div>
           <div class="cal-widget">
-            <div class="cal-item">
-              <div class="cal-date">8/13</div>
-              <div>週次チーム定例会議 <span class="text-muted">・ 10:00 ・ 3階 大会議室</span></div>
-            </div>
-            <div class="cal-item">
-              <div class="cal-date">8/14</div>
-              <div>第2四半期 実績報告 <span class="text-muted">・ 14:00 ・ 役員会議室</span></div>
-            </div>
-            <div class="cal-item">
-              <div class="cal-date">8/15</div>
-              <div>新規プロジェクト キックオフミーティング <span class="text-muted">・ 16:00 ・ 2階 セミナー室</span></div>
-            </div>
+            <c:forEach var="sc" items="${upcomingSchedule}">
+              <div class="cal-item">
+                <div class="cal-date">
+                  <c:out value="${fn:substring(sc.schedule_date, 5, 10)}"/>
+                </div>
+                <div>
+                  <a href="${cp}/pages/schedule-view.do?no=${sc.schedule_no}"
+                     class="title-link"><c:out value="${sc.title}"/></a>
+                  <span class="text-muted">
+                    ・ <c:out value="${sc.timeRange}"/>
+                    <c:if test="${not empty sc.location}">
+                      ・ <c:out value="${sc.location}"/>
+                    </c:if>
+                  </span>
+                </div>
+              </div>
+            </c:forEach>
+            <c:if test="${empty upcomingSchedule}">
+              <div class="p-3 text-center">
+                <span class="text-muted small">これからの予定はありません。</span>
+              </div>
+            </c:if>
           </div>
         </div>
       </section>
@@ -187,20 +192,35 @@
           </div>
           <div class="approval-list">
             <div class="approval-item">
-              <span>年次休暇申請書</span>
-              <span class="status-pill status-wait">決裁待ち</span>
+              <span><i class="bi bi-inbox"></i> 決裁待ち</span>
+              <span class="status-pill ${waitingApproval > 0 ? 'status-wait' : 'status-done'}">
+                ${waitingApproval}件
+              </span>
             </div>
             <div class="approval-item">
-              <span>出張報告書</span>
-              <span class="status-pill status-progress">進行中</span>
+              <span><i class="bi bi-clock-history"></i> 本日の勤怠</span>
+              <c:choose>
+                <c:when test="${empty todayAttendance}">
+                  <a href="${cp}/pages/attendance.do" class="status-pill status-wait">未出勤</a>
+                </c:when>
+                <c:when test="${not todayAttendance.checkedOut}">
+                  <span class="status-pill status-progress">
+                    出勤 <c:out value="${todayAttendance.in_time}"/>
+                  </span>
+                </c:when>
+                <c:otherwise>
+                  <span class="status-pill status-done">
+                    <c:out value="${todayAttendance.workTimeText}"/>
+                  </span>
+                </c:otherwise>
+              </c:choose>
             </div>
             <div class="approval-item">
-              <span>備品購入申請書</span>
-              <span class="status-pill status-done">承認完了</span>
-            </div>
-            <div class="approval-item">
-              <span>在宅勤務申請書</span>
-              <span class="status-pill status-wait">決裁待ち</span>
+              <span><i class="bi bi-bell"></i> 未読の通知</span>
+              <a href="${cp}/pages/notifications.do"
+                 class="status-pill ${unreadCount > 0 ? 'status-wait' : 'status-done'}">
+                ${unreadCount}件
+              </a>
             </div>
           </div>
         </div>
