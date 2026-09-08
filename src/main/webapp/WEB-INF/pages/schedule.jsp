@@ -1,5 +1,23 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%--
+  =====================================================================
+  일정 (월간 캘린더)
+
+  [수정] 2026-09-07
+    변경 전 : 달력 칸과 일정이 전부 하드코딩. 월 이동도 되지 않았다.
+    변경 후 : ScheduleListService 가 담아준 scheduleList 를
+              날짜별로 묶어 달력에 배치한다.
+
+  달력 그리는 방법
+    firstDayOfWeek : 1일의 요일 (일=0 ... 토=6). 앞쪽 빈 칸 개수가 된다.
+    lastDay        : 그 달의 마지막 날짜
+    일정은 schedule_date("YYYY-MM-DD") 로 비교해 해당 칸에 넣는다.
+  =====================================================================
+--%>
+<c:set var="cp" value="${pageContext.request.contextPath}"/>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -12,34 +30,43 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
+<link rel="stylesheet" href="${cp}/css/common.css">
+<link rel="stylesheet" href="${cp}/css/header.css">
+<link rel="stylesheet" href="${cp}/css/footer.css">
+<link rel="stylesheet" href="${cp}/css/responsive.css">
+
 <style>
-  /* 이 페이지 전용 캘린더 그리드는 분량이 작아 공통 CSS에 포함하지 않고 여기서 관리 */
-  .cal-grid { border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; }
-  .cal-grid table { width: 100%; border-collapse: collapse; }
-  .cal-grid th { background: #f7f9fa; font-size: .78rem; color: var(--ink-soft); padding: .6rem 0; text-align: center; border-bottom: 1px solid var(--line); }
-  .cal-grid td { width: 14.28%; height: 92px; vertical-align: top; padding: .4rem; border: 1px solid var(--line); font-size: .78rem; }
-  .cal-grid td .day-num { font-weight: 700; color: var(--ink); font-size: .82rem; }
-  .cal-grid td.muted .day-num { color: #c3cad4; }
-  .cal-grid td.today { background: var(--teal-tint); }
-  .cal-grid .ev { display:block; background: var(--navy); color:#fff; border-radius:4px; padding:.05rem .35rem; font-size:.7rem; margin-top:.25rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .cal-grid .ev.ev-teal { background: var(--teal); }
+/* 월간 캘린더 */
+.cal-table { table-layout: fixed; width: 100%; }
+.cal-table th { text-align: center; padding: 8px 4px; font-size: .82rem; background: #f7f9fa; }
+.cal-table td { height: 108px; vertical-align: top; padding: 6px; border: 1px solid #e5eaea; }
+.cal-table td.empty { background: #fafbfb; }
+.cal-day { font-size: .8rem; font-weight: 600; margin-bottom: 4px; }
+.cal-day.sun { color: #c0392b; }
+.cal-day.sat { color: #2b6cb0; }
+.cal-table td.today { background: #eef8f6; }
+.cal-table td.today .cal-day { color: var(--teal, #0e7c6f); }
+.cal-event {
+  display: block; font-size: .72rem; line-height: 1.4;
+  padding: 2px 5px; margin-bottom: 3px; border-radius: 3px;
+  background: #e2f1ee; color: #0a5b51; text-decoration: none;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.cal-event:hover { background: #cfe8e3; }
+.cal-event.all  { background: #fdf0dc; color: #8a5a08; }
+.cal-event.dept { background: #e6eefb; color: #244f8f; }
 </style>
 </head>
 <body data-page="schedule">
-<%@ include file="../components/header.jsp"%>
-<%@ include file="../components/modal.jsp"%>
-<div id="modal-placeholder"></div>
+<%@ include file="/WEB-INF/components/header.jsp"%>
+<%@ include file="/WEB-INF/components/modal.jsp"%>
 
 <section class="sub-banner">
   <div class="container">
     <h1><i class="bi bi-calendar3"></i> スケジュール</h1>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/index.do">ホーム</a></li>
+        <li class="breadcrumb-item"><a href="${cp}/index.do">ホーム</a></li>
         <li class="breadcrumb-item active" aria-current="page">スケジュール</li>
       </ol>
     </nav>
@@ -49,129 +76,156 @@
 <div id="app-content">
   <div class="container content-wrap">
     <div class="row g-4">
-      <aside class="col-lg-3"><div id="sidebar-placeholder"></div><%@ include file="../components/sidebar.jsp"%></aside>
+      <aside class="col-lg-3"><%@ include file="/WEB-INF/components/sidebar.jsp"%></aside>
 
       <section class="col-lg-9">
-        <div class="panel mb-4">
-          <div class="panel-header">
-            <div class="d-flex align-items-center gap-2">
-              <button class="btn btn-sm btn-outline-secondary" id="calPrevBtn"><i class="bi bi-chevron-left"></i></button>
-              <h5 class="mb-0">2026年 8月</h5>
-              <button class="btn btn-sm btn-outline-secondary" id="calNextBtn"><i class="bi bi-chevron-right"></i></button>
-            </div>
-            <a href="${pageContext.request.contextPath}/pages/schedule-write.do" class="btn btn-teal btn-sm"><i class="bi bi-plus-lg"></i> 予定登録</a>
+
+        <c:if test="${param.result eq 'saved'}">
+          <div class="alert alert-success py-2 px-3 small">予定を保存しました。</div>
+        </c:if>
+        <c:if test="${param.result eq 'deleted'}">
+          <div class="alert alert-success py-2 px-3 small">予定を削除しました。</div>
+        </c:if>
+        <c:if test="${param.result eq 'no_permission'}">
+          <div class="alert alert-warning py-2 px-3 small">
+            自分が登録した予定のみ編集できます。
           </div>
-          <div class="p-3">
-            <div class="cal-grid table-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="muted"><span class="day-num">26</span></td>
-                    <td class="muted"><span class="day-num">27</span></td>
-                    <td class="muted"><span class="day-num">28</span></td>
-                    <td class="muted"><span class="day-num">29</span></td>
-                    <td class="muted"><span class="day-num">30</span></td>
-                    <td class="muted"><span class="day-num">31</span></td>
-                    <td><span class="day-num">1</span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="day-num">2</span></td>
-                    <td><span class="day-num">3</span><span class="ev">週次定例</span></td>
-                    <td><span class="day-num">4</span></td>
-                    <td><span class="day-num">5</span></td>
-                    <td><span class="day-num">6</span><span class="ev ev-teal">安全教育</span></td>
-                    <td><span class="day-num">7</span></td>
-                    <td><span class="day-num">8</span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="day-num">9</span></td>
-                    <td><span class="day-num">10</span><span class="ev">週次定例</span></td>
-                    <td><span class="day-num">11</span></td>
-                    <td><span class="day-num">12</span></td>
-                    <td><span class="day-num">13</span><span class="ev ev-teal">キックオフMTG</span></td>
-                    <td><span class="day-num">14</span></td>
-                    <td><span class="day-num">15</span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="day-num">16</span></td>
-                    <td><span class="day-num">17</span><span class="ev">夏季休暇開始</span></td>
-                    <td><span class="day-num">18</span></td>
-                    <td><span class="day-num">19</span></td>
-                    <td><span class="day-num">20</span></td>
-                    <td><span class="day-num">21</span><span class="ev">夏季休暇終了</span></td>
-                    <td><span class="day-num">22</span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="day-num">23</span></td>
-                    <td><span class="day-num">24</span><span class="ev">週次定例</span></td>
-                    <td><span class="day-num">25</span></td>
-                    <td><span class="day-num">26</span></td>
-                    <td><span class="day-num">27</span></td>
-                    <td><span class="day-num">28</span></td>
-                    <td><span class="day-num">29</span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="day-num">30</span></td>
-                    <td><span class="day-num">31</span></td>
-                    <td class="muted"><span class="day-num">1</span></td>
-                    <td class="muted"><span class="day-num">2</span></td>
-                    <td class="muted"><span class="day-num">3</span></td>
-                    <td class="muted"><span class="day-num">4</span></td>
-                    <td class="muted"><span class="day-num">5</span></td>
-                  </tr>
-                </tbody>
-              </table>
+        </c:if>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h5><i class="bi bi-calendar3"></i> ${year}年 ${month}月</h5>
+
+            <div class="d-flex gap-2 align-items-center">
+              <a href="${cp}/pages/schedule.do?ym=${prevMonth}"
+                 class="btn btn-outline-secondary btn-sm" aria-label="前の月">
+                <i class="bi bi-chevron-left"></i>
+              </a>
+              <a href="${cp}/pages/schedule.do" class="btn btn-outline-secondary btn-sm">今月</a>
+              <a href="${cp}/pages/schedule.do?ym=${nextMonth}"
+                 class="btn btn-outline-secondary btn-sm" aria-label="次の月">
+                <i class="bi bi-chevron-right"></i>
+              </a>
+              <a href="${cp}/pages/schedule-write.do" class="btn btn-teal btn-sm ms-2">
+                <i class="bi bi-plus-lg"></i> 予定登録
+              </a>
             </div>
+          </div>
+
+          <div class="table-scroll">
+            <table class="cal-table">
+              <thead>
+                <tr>
+                  <th style="color:#c0392b;">日</th>
+                  <th>月</th><th>火</th><th>水</th><th>木</th><th>金</th>
+                  <th style="color:#2b6cb0;">土</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <%-- 1일 앞의 빈 칸 --%>
+                  <c:forEach begin="1" end="${firstDayOfWeek}" var="i">
+                    <td class="empty"></td>
+                  </c:forEach>
+
+                  <c:forEach begin="1" end="${lastDay}" var="day">
+                    <%-- 이 칸의 날짜 문자열 (YYYY-MM-DD) --%>
+                    <c:set var="cellDate"
+                           value="${yearMonth}-${day < 10 ? '0'.concat(day) : day}"/>
+
+                    <td class="${cellDate eq today ? 'today' : ''}">
+                      <c:set var="dow" value="${(firstDayOfWeek + day - 1) % 7}"/>
+                      <div class="cal-day ${dow == 0 ? 'sun' : (dow == 6 ? 'sat' : '')}">
+                        ${day}
+                      </div>
+
+                      <%-- 이 날짜의 일정만 그린다 --%>
+                      <c:forEach var="sc" items="${scheduleList}">
+                        <c:if test="${sc.schedule_date eq cellDate}">
+                          <a href="${cp}/pages/schedule-view.do?no=${sc.schedule_no}"
+                             class="cal-event ${sc.visibility eq 'ALL' ? 'all'
+                                              : (sc.visibility eq 'DEPT' ? 'dept' : '')}"
+                             title="<c:out value='${sc.title}'/>">
+                            <c:out value="${sc.timeRange}"/>
+                            <c:out value="${sc.title}"/>
+                          </a>
+                        </c:if>
+                      </c:forEach>
+                    </td>
+
+                    <%-- 토요일이면 줄바꿈 --%>
+                    <c:if test="${dow == 6 and day ne lastDay}">
+                      </tr><tr>
+                    </c:if>
+                  </c:forEach>
+
+                  <%-- 마지막 주의 남은 칸 채우기 --%>
+                  <c:set var="lastDow" value="${(firstDayOfWeek + lastDay - 1) % 7}"/>
+                  <c:if test="${lastDow < 6}">
+                    <c:forEach begin="${lastDow + 1}" end="6" var="i">
+                      <td class="empty"></td>
+                    </c:forEach>
+                  </c:if>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <!-- ==================== 이번주 일정 리스트 ==================== -->
-        <div class="panel">
+        <%-- ==================== 이번 달 일정 목록 ==================== --%>
+        <div class="panel mt-3">
           <div class="panel-header">
-            <h5><i class="bi bi-list-ul"></i> 今週の予定一覧</h5>
+            <h5><i class="bi bi-list-ul"></i> ${month}月の予定</h5>
+            <span class="text-muted" style="font-size:.8rem;">
+              全 ${fn:length(scheduleList)}件
+            </span>
           </div>
-          <div class="cal-widget">
-            <div class="cal-item">
-              <div class="cal-date">8/13</div>
-              <div><a href="${pageContext.request.contextPath}/pages/schedule-view.do">週次チーム定例会議 </a><span class="text-muted">・ 10:00〜11:00 ・ 3階 大会議室</span></div>
-            </div>
-            <div class="cal-item">
-              <div class="cal-date">8/14</div>
-              <div>第2四半期 実績報告 <span class="text-muted">・ 14:00〜15:30 ・ 役員会議室</span></div>
-            </div>
-            <div class="cal-item">
-              <div class="cal-date">8/15</div>
-              <div>新規プロジェクト キックオフミーティング <span class="text-muted">・ 16:00〜17:00 ・ 2階 セミナー室</span></div>
-            </div>
+          <div class="table-scroll">
+            <table class="table list-table mb-0">
+              <thead>
+                <tr>
+                  <th style="width:120px;">日付</th>
+                  <th style="width:120px;">時間</th>
+                  <th>件名</th>
+                  <th style="width:140px;">場所</th>
+                  <th style="width:90px;" class="text-center">公開</th>
+                </tr>
+              </thead>
+              <tbody>
+                <c:forEach var="sc" items="${scheduleList}">
+                  <tr>
+                    <td>${sc.schedule_date}</td>
+                    <td><c:out value="${sc.timeRange}"/></td>
+                    <td>
+                      <a href="${cp}/pages/schedule-view.do?no=${sc.schedule_no}"
+                         class="title-link"><c:out value="${sc.title}"/></a>
+                    </td>
+                    <td><c:out value="${sc.location}"/></td>
+                    <td class="text-center">
+                      <span class="badge-normal"><c:out value="${sc.visibilityLabel}"/></span>
+                    </td>
+                  </tr>
+                </c:forEach>
+
+                <c:if test="${empty scheduleList}">
+                  <tr>
+                    <td colspan="5" class="text-center py-4">
+                      <span class="text-muted small">この月の予定はありません。</span>
+                    </td>
+                  </tr>
+                </c:if>
+              </tbody>
+            </table>
           </div>
         </div>
-        <div class="panel mt-4">
-          <div class="panel-header">
-            <h5><i class="bi bi-share"></i> 予定の公開・参加者設定</h5>
-          </div>
-          <div class="panel-body">
-            <div class="row g-3">
-              <div class="col-md-4"><div class="border rounded p-3 h-100"><span class="status-pill status-progress">個人</span><p class="small mb-0 mt-2">自分だけが閲覧できる予定</p></div></div>
-              <div class="col-md-4"><div class="border rounded p-3 h-100"><span class="status-pill status-done">部署</span><p class="small mb-0 mt-2">所属部署のメンバーに共有</p></div></div>
-              <div class="col-md-4"><div class="border rounded p-3 h-100"><span class="status-pill status-wait">全社</span><p class="small mb-0 mt-2">全社員が閲覧できる予定</p></div></div>
-            </div>
-            <p class="form-text-desc mt-3 mb-0">予定登録画面で公開範囲と参加者を指定する想定の表示領域です。</p>
-          </div>
-        </div>
+
       </section>
     </div>
   </div>
 </div>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/common.js"></script>
-<script src="${pageContext.request.contextPath}/js/schedule.js"></script>
-<%@ include file="../components/footer.jsp"%>
+<script src="${cp}/js/common.js"></script>
+<%@ include file="/WEB-INF/components/footer.jsp"%>
 </body>
 </html>
