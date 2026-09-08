@@ -1,35 +1,45 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-   
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%--
+  =====================================================================
+  자유게시판 목록
+
+  [수정] 2026-09-07
+    변경 전 : 게시글이 HTML 하드코딩. 테이블도 DAO 도 없었다.
+              탭 링크가 "board-list.html" 이라 눌러도 404 였다.
+    변경 후 : BoardListService 가 담아준 boardList / paging 을 그린다.
+  =====================================================================
+--%>
+<c:set var="cp" value="${pageContext.request.contextPath}"/>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>掲示板 | InfraLink</title>
+<title>自由掲示板 | InfraLink</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
+<link rel="stylesheet" href="${cp}/css/common.css">
+<link rel="stylesheet" href="${cp}/css/header.css">
+<link rel="stylesheet" href="${cp}/css/footer.css">
+<link rel="stylesheet" href="${cp}/css/responsive.css">
 </head>
 <body data-page="board">
-<div id="modal-placeholder"></div>
-
 <%@ include file="/WEB-INF/components/header.jsp"%>
 <%@ include file="/WEB-INF/components/modal.jsp"%>
+
 <section class="sub-banner">
   <div class="container">
     <h1><i class="bi bi-clipboard2-data"></i> 掲示板</h1>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/index.do">ホーム</a></li>
-        <li class="breadcrumb-item active" aria-current="page">掲示板</li>
+        <li class="breadcrumb-item"><a href="${cp}/index.do">ホーム</a></li>
+        <li class="breadcrumb-item active" aria-current="page">自由掲示板</li>
       </ol>
     </nav>
   </div>
@@ -38,119 +48,128 @@
 <div id="app-content">
   <div class="container content-wrap">
     <div class="row g-4">
-      <aside class="col-lg-3"><div id="sidebar-placeholder"></div><%@ include file="/WEB-INF/components/sidebar.jsp"%></aside>
+      <aside class="col-lg-3"><%@ include file="/WEB-INF/components/sidebar.jsp"%></aside>
 
       <section class="col-lg-9">
-        <!-- ==================== 게시판 탭 ==================== -->
-        <ul class="nav nav-pills mb-3 gap-2">
-          <li class="nav-item"><a class="nav-link active btn-teal text-white" href="${pageContext.request.contextPath}/pages/board.do">自由掲示板</a></li>
-          <li class="nav-item"><a class="nav-link" style="color:var(--ink-soft);" href="#">情報共有</a></li>
-          <li class="nav-item"><a class="nav-link" style="color:var(--ink-soft);" href="#">中古売買</a></li>
-          <li class="nav-item"><a class="nav-link" style="color:var(--ink-soft);" href="#">Q&amp;A</a></li>
+
+        <c:if test="${param.result eq 'created'}">
+          <div class="alert alert-success py-2 px-3 small">投稿を登録しました。</div>
+        </c:if>
+        <c:if test="${param.result eq 'deleted'}">
+          <div class="alert alert-success py-2 px-3 small">投稿を削除しました。</div>
+        </c:if>
+
+        <%-- ==================== 분류 탭 ====================
+             [수정] 기존 탭은 href="board-list.html" 이라 404 였다. --%>
+        <ul class="nav nav-pills gap-2 mb-3">
+          <li class="nav-item">
+            <a class="nav-link ${empty category ? 'active btn-teal text-white' : ''}"
+               href="${cp}/pages/board.do">全体</a>
+          </li>
+          <c:forEach var="cat" items="自由,質問,情報,サークル">
+            <li class="nav-item">
+              <a class="nav-link ${category eq cat ? 'active btn-teal text-white' : ''}"
+                 href="${cp}/pages/board.do?category=${cat}"><c:out value="${cat}"/></a>
+            </li>
+          </c:forEach>
         </ul>
 
-        <div class="filter-bar">
-          <select class="form-select form-select-sm" style="width:150px;">
-            <option selected>全体</option>
-            <option>人事部</option>
-            <option>総務部</option>
-            <option>開発部</option>
-          </select>
-          <div class="input-group input-group-sm ms-auto" style="max-width:260px;">
-            <input type="text" class="form-control" placeholder="タイトルまたは内容を検索">
-            <button class="btn btn-teal" type="button"><i class="bi bi-search"></i></button>
+        <%-- ==================== 검색 ==================== --%>
+        <form class="filter-bar" method="get" action="${cp}/pages/board.do">
+          <input type="hidden" name="category" value="<c:out value='${category}'/>">
+          <div class="input-group input-group-sm ms-auto" style="max-width:300px;">
+            <input type="text" name="keyword" class="form-control"
+                   placeholder="タイトル・本文を検索"
+                   value="<c:out value='${keyword}'/>">
+            <button class="btn btn-teal" type="submit" aria-label="検索">
+              <i class="bi bi-search"></i>
+            </button>
           </div>
-        </div>
+          <c:if test="${not empty keyword}">
+            <a href="${cp}/pages/board.do" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-x-lg"></i>
+            </a>
+          </c:if>
+        </form>
 
         <div class="panel">
           <div class="panel-header">
-            <h5><i class="bi bi-chat-square-text"></i> 自由掲示板</h5>
-            <span class="text-muted" style="font-size:.8rem;">全 156件</span>
+            <h5><i class="bi bi-list-ul"></i> 投稿一覧</h5>
+            <span class="text-muted" style="font-size:.8rem;">全 ${paging.totalCount}件</span>
           </div>
+
           <div class="table-scroll">
             <table class="table list-table mb-0">
               <thead>
                 <tr>
-                  <th style="width:60px;" class="text-center">No</th>
+                  <th style="width:60px;"  class="text-center">No</th>
+                  <th style="width:90px;"  class="text-center">区分</th>
                   <th>タイトル</th>
-                  <th style="width:120px;" class="text-center">作成者</th>
+                  <th style="width:140px;" class="text-center">作成者</th>
                   <th style="width:110px;" class="text-center">登録日</th>
-                  <th style="width:70px;" class="text-center">閲覧</th>
+                  <th style="width:70px;"  class="text-center">閲覧</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td class="text-center">156</td>
-                  <td><a href="${pageContext.request.contextPath}/pages/board-view.do" class="title-link">社員食堂の新メニュー、みなさんはどう思いますか？</a><span class="count-reply">[12]</span></td>
-                  <td class="text-center">佐藤 花子</td>
-                  <td class="text-center">2026.08.13</td>
-                  <td class="text-center">88</td>
-                </tr>
-                <tr>
-                  <td class="text-center">155</td>
-                  <td><a href="${pageContext.request.contextPath}/pages/board-view.do" class="title-link">今週金曜、開発部の歓迎会あります（自由参加）</a><span class="count-reply">[5]</span></td>
-                  <td class="text-center">鈴木 一郎</td>
-                  <td class="text-center">2026.08.12</td>
-                  <td class="text-center">64</td>
-                </tr>
-                <tr>
-                  <td class="text-center">154</td>
-                  <td><a href="${pageContext.request.contextPath}/pages/board-view.do" class="title-link">オフィスの空調が寒すぎます…調整可能でしょうか</a><span class="count-reply">[9]</span></td>
-                  <td class="text-center">田中 誠</td>
-                  <td class="text-center">2026.08.11</td>
-                  <td class="text-center">102</td>
-                </tr>
-                <tr>
-                  <td class="text-center">153</td>
-                  <td><a href="${pageContext.request.contextPath}/pages/board-view.do" class="title-link">社内ランニングクラブ、新規メンバー募集中です</a><span class="count-reply">[3]</span></td>
-                  <td class="text-center">高橋 直子</td>
-                  <td class="text-center">2026.08.10</td>
-                  <td class="text-center">41</td>
-                </tr>
-                <tr>
-                  <td class="text-center">152</td>
-                  <td><a href="${pageContext.request.contextPath}/pages/board-view.do" class="title-link">3階の休憩室のコーヒーマシンが故障しています</a><span class="count-reply">[7]</span></td>
-                  <td class="text-center">伊藤 健</td>
-                  <td class="text-center">2026.08.09</td>
-                  <td class="text-center">53</td>
-                </tr>
-                <tr>
-                  <td class="text-center">151</td>
-                  <td><a href="${pageContext.request.contextPath}/pages/board-view.do" class="title-link">在宅勤務時のVPN接続方法まとめ</a><span class="count-reply">[15]</span></td>
-                  <td class="text-center">渡辺 健太</td>
-                  <td class="text-center">2026.08.08</td>
-                  <td class="text-center">210</td>
-                </tr>
+
+                <c:forEach var="board" items="${boardList}">
+                  <tr>
+                    <td class="text-center">${board.board_no}</td>
+                    <td class="text-center">
+                      <span class="badge-normal"><c:out value="${board.category}"/></span>
+                    </td>
+                    <td>
+                      <a href="${cp}/pages/board-view.do?no=${board.board_no}"
+                         class="title-link"><c:out value="${board.title}"/></a>
+
+                      <%-- 댓글 수 (스칼라 서브쿼리로 목록과 함께 가져온다) --%>
+                      <c:if test="${board.comment_count > 0}">
+                        <span class="text-teal small ms-1">[${board.comment_count}]</span>
+                      </c:if>
+                      <c:if test="${board.hasFile}">
+                        <i class="bi bi-paperclip text-muted ms-1" title="添付あり"></i>
+                      </c:if>
+                    </td>
+                    <td class="text-center"><c:out value="${board.emp_name}"/></td>
+                    <td class="text-center">${board.reg_date}</td>
+                    <td class="text-center">${board.read_count}</td>
+                  </tr>
+                </c:forEach>
+
+                <c:if test="${empty boardList}">
+                  <tr>
+                    <td colspan="6" class="text-center py-5">
+                      <div class="empty-state">
+                        <i class="bi bi-clipboard2-data"></i>
+                        <h6>投稿はありません</h6>
+                        <p class="small mb-0">最初の投稿を書いてみませんか。</p>
+                      </div>
+                    </td>
+                  </tr>
+                </c:if>
+
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- 一般ユーザーは作成権限がない場合、この領域を非表示にします -->
-        <div class="d-flex justify-content-between align-items-center mt-3" data-authorized-only>
-          <a href="${pageContext.request.contextPath}/pages/board-write.do" class="btn btn-teal btn-sm"><i class="bi bi-pencil-square"></i> 登録する</a>
-          <span class="small text-muted">投稿権限を持つユーザーにのみ表示</span>
+        <div class="d-flex justify-content-end align-items-center mt-3">
+          <a href="${cp}/pages/board-write.do" class="btn btn-teal btn-sm">
+            <i class="bi bi-pencil-square"></i> 投稿する
+          </a>
         </div>
-        <div class="panel mt-4 d-none" id="emptyBoard"><div class="empty-state"><i class="bi bi-search"></i><h6>検索結果がありません</h6><p class="small mb-0">検索条件を変更して、もう一度お試しください。</p></div></div>
 
-        <div class="pagination-wrap">
-          <ul class="pagination">
-            <li class="page-item disabled"><a class="page-link" href="#">前へ</a></li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">次へ</a></li>
-          </ul>
-        </div>
+        <c:set var="pagingUrl"   value="${cp}/pages/board.do"/>
+        <c:set var="pagingQuery" value="&keyword=${keyword}&category=${category}"/>
+        <%@ include file="/WEB-INF/components/paging.jsp"%>
+
       </section>
     </div>
   </div>
 </div>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/common.js"></script>
-<script src="${pageContext.request.contextPath}/js/board.js"></script>
+<script src="${cp}/js/common.js"></script>
 <%@ include file="/WEB-INF/components/footer.jsp"%>
 </body>
 </html>
