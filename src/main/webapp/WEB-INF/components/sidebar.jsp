@@ -1,11 +1,10 @@
-<!-- =====================================================================
-     components/sidebar.html
-     - 서브 페이지(공지/게시판/일정/사원/결재 등)에서 공통으로 쓰는 좌측 메뉴
-     - common.js 의 loadComponent() 가 #sidebar-placeholder 에 삽입한다
-     - 현재 위치는 body 태그의 data-page 값을 읽어 active 클래스를 부여한다 (main.js)
-     ===================================================================== -->
-     <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%--
+  =====================================================================
+  서브 페이지 공통 좌측 메뉴
+  현재 위치는 body 의 data-page 값을 읽어 common.js 가 active 를 준다.
+  =====================================================================
+--%>
    
 <nav class="panel sidebar-menu">
   <div class="panel-header">

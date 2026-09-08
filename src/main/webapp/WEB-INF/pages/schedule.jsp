@@ -12,10 +12,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="../css/common.css">
-<link rel="stylesheet" href="../css/header.css">
-<link rel="stylesheet" href="../css/footer.css">
-<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
 <style>
   /* 이 페이지 전용 캘린더 그리드는 분량이 작아 공통 CSS에 포함하지 않고 여기서 관리 */
   .cal-grid { border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; }
@@ -32,7 +32,6 @@
 <body data-page="schedule">
 <%@ include file="../components/header.jsp"%>
 <%@ include file="../components/modal.jsp"%>
-<div id="header-placeholder"></div>
 <div id="modal-placeholder"></div>
 
 <section class="sub-banner">
@@ -169,11 +168,10 @@
   </div>
 </div>
 
-<div id="footer-placeholder"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-<script src="../js/common.js"></script>
-<script src="../js/schedule.js"></script>
-</body>
+<script src="${pageContext.request.contextPath}/js/common.js"></script>
+<script src="${pageContext.request.contextPath}/js/schedule.js"></script>
 <%@ include file="../components/footer.jsp"%>
+</body>
 </html>

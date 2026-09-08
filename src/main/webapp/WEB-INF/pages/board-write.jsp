@@ -13,14 +13,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="../css/common.css">
-<link rel="stylesheet" href="../css/header.css">
-<link rel="stylesheet" href="../css/footer.css">
-<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
 </head>
 <body data-page="board">
 
-<div id="header-placeholder"></div>
 <div id="modal-placeholder"></div>
 <%@ include file="/WEB-INF/components/header.jsp"%>
 <%@ include file="/WEB-INF/components/modal.jsp"%>
@@ -29,8 +28,8 @@
     <h1><i class="bi bi-clipboard2-data"></i> 掲示板</h1>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="../index.html">ホーム</a></li>
-        <li class="breadcrumb-item"><a href="board-list.html">掲示板</a></li>
+        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/index.do">ホーム</a></li>
+        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/pages/board.do">掲示板</a></li>
         <li class="breadcrumb-item active" aria-current="page">登録・編集</li>
       </ol>
     </nav>
@@ -89,7 +88,7 @@
             </div>
 
             <div class="form-actions">
-              <a href="board-list.html" class="btn btn-outline-secondary px-4">キャンセル</a>
+              <a href="${pageContext.request.contextPath}/pages/board.do" class="btn btn-outline-secondary px-4">キャンセル</a>
               <button type="submit" class="btn btn-teal px-4">投稿する</button>
             </div>
           </form>
@@ -99,11 +98,10 @@
   </div>
 </div>
 
-<div id="footer-placeholder"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-<script src="../js/common.js"></script>
-<script src="../js/board.js"></script>
-</body>
+<script src="${pageContext.request.contextPath}/js/common.js"></script>
+<script src="${pageContext.request.contextPath}/js/board.js"></script>
 <%@ include file="/WEB-INF/components/footer.jsp"%>
+</body>
 </html>

@@ -1,10 +1,9 @@
-<!-- =====================================================================
-     components/modal.html
-     - 헤더의 [クイックメニュー] 버튼으로 여는 공통 빠른메뉴 모달
-     - common.js 의 loadComponent() 가 #modal-placeholder 에 삽입한다
-     ===================================================================== -->
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%--
+  =====================================================================
+  공통 빠른메뉴 모달 (헤더의 クイックメニュー 버튼으로 연다)
+  =====================================================================
+--%>
 <div class="modal fade" id="quickMenuModal" tabindex="-1" aria-labelledby="quickMenuModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">

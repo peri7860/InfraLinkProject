@@ -211,7 +211,7 @@
             <h5><i class="bi bi-person-lines-fill"></i> 社員検索</h5>
           </div>
           <div class="emp-search-widget">
-            <form class="d-flex gap-2" action="/pages/employee-list.html" method="get">
+            <form class="d-flex gap-2" action="${pageContext.request.contextPath}/pages/employee.do" method="get">
               <input type="text" class="form-control form-control-sm" placeholder="名前または部署で検索" name="keyword">
               <button class="btn btn-sm btn-teal" type="submit">
                 <i class="bi bi-search"></i>

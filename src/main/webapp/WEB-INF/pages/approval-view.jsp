@@ -18,10 +18,10 @@
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap"
 	rel="stylesheet">
 <!-- Custom CSS -->
-<link rel="stylesheet" href="../css/common.css">
-<link rel="stylesheet" href="../css/header.css">
-<link rel="stylesheet" href="../css/footer.css">
-<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
 </head>
 
 <body data-page="approval">
@@ -253,6 +253,6 @@
 		
 	</script>
 	<!-- Common JS -->
-	<script src="../js/common.js"></script>
+	<script src="${pageContext.request.contextPath}/js/common.js"></script>
 </body>
 </html>

@@ -13,13 +13,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="../css/common.css">
-<link rel="stylesheet" href="../css/header.css">
-<link rel="stylesheet" href="../css/footer.css">
-<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
 </head>
 <body data-page="board">
-<div id="header-placeholder"></div>
 <div id="modal-placeholder"></div>
 
 <%@ include file="/WEB-INF/components/header.jsp"%>
@@ -44,7 +43,7 @@
       <section class="col-lg-9">
         <!-- ==================== 게시판 탭 ==================== -->
         <ul class="nav nav-pills mb-3 gap-2">
-          <li class="nav-item"><a class="nav-link active btn-teal text-white" href="board-list.html">自由掲示板</a></li>
+          <li class="nav-item"><a class="nav-link active btn-teal text-white" href="${pageContext.request.contextPath}/pages/board.do">自由掲示板</a></li>
           <li class="nav-item"><a class="nav-link" style="color:var(--ink-soft);" href="#">情報共有</a></li>
           <li class="nav-item"><a class="nav-link" style="color:var(--ink-soft);" href="#">中古売買</a></li>
           <li class="nav-item"><a class="nav-link" style="color:var(--ink-soft);" href="#">Q&amp;A</a></li>
@@ -148,11 +147,10 @@
   </div>
 </div>
 
-<div id="footer-placeholder"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-<script src="../js/common.js"></script>
-<script src="../js/board.js"></script>
-</body>
+<script src="${pageContext.request.contextPath}/js/common.js"></script>
+<script src="${pageContext.request.contextPath}/js/board.js"></script>
 <%@ include file="/WEB-INF/components/footer.jsp"%>
+</body>
 </html>

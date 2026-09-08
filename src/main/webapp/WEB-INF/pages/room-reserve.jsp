@@ -12,15 +12,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="../css/common.css">
-<link rel="stylesheet" href="../css/header.css">
-<link rel="stylesheet" href="../css/footer.css">
-<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
 </head>
 <body data-page="room-reserve">
 <%@ include file="/WEB-INF/components/header.jsp"%>
 <%@ include file="/WEB-INF/components/modal.jsp"%>
-<div id="header-placeholder"></div>
 <div id="modal-placeholder"></div>
 
 <section class="sub-banner">
@@ -133,10 +132,9 @@
   </div>
 </div>
 
-<div id="footer-placeholder"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-<script src="../js/common.js"></script>
-</body>
+<script src="${pageContext.request.contextPath}/js/common.js"></script>
 <%@ include file="/WEB-INF/components/footer.jsp"%>
+</body>
 </html>

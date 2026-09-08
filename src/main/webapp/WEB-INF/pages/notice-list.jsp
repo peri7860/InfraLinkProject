@@ -1,6 +1,23 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-   
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%--
+  =====================================================================
+  공지사항 목록
+
+  [수정] 2026-09-07
+    변경 전 : 공지 8건이 HTML 에 하드코딩. 검색창·분류 select 는 동작하지
+              않았고, 페이지 번호(1 2 3 4 5)도 고정에 href="#" 이었다.
+              상세로 가는 링크 15곳 전부 ?no= 파라미터가 없어서
+              어떤 글인지 알 수 없는 구조였다.
+    변경 후 : NoticeListService 가 담아준 noticeList / paging 을 그린다.
+              검색·분류 필터가 실제로 동작하고, 링크에 ?no= 가 붙는다.
+
+  XSS : 사용자가 입력한 값(제목·작성자)은 반드시 <c:out> 으로 이스케이프한다.
+        ${...} 로 그냥 출력하면 제목에 <script> 를 넣어 저장했을 때 실행된다.
+  =====================================================================
+--%>
+<c:set var="cp" value="${pageContext.request.contextPath}"/>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -13,23 +30,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="../css/common.css">
-<link rel="stylesheet" href="../css/header.css">
-<link rel="stylesheet" href="../css/footer.css">
-<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="${cp}/css/common.css">
+<link rel="stylesheet" href="${cp}/css/header.css">
+<link rel="stylesheet" href="${cp}/css/footer.css">
+<link rel="stylesheet" href="${cp}/css/responsive.css">
 </head>
 <body data-page="notice">
 <%@ include file="/WEB-INF/components/header.jsp"%>
 <%@ include file="/WEB-INF/components/modal.jsp"%>
-<div id="header-placeholder"></div>
-<div id="modal-placeholder"></div>
 
 <section class="sub-banner">
   <div class="container">
     <h1><i class="bi bi-megaphone"></i> お知らせ</h1>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/index.do">ホーム</a></li>
+        <li class="breadcrumb-item"><a href="${cp}/index.do">ホーム</a></li>
         <li class="breadcrumb-item active" aria-current="page">お知らせ</li>
       </ol>
     </nav>
@@ -39,141 +54,157 @@
 <div id="app-content">
   <div class="container content-wrap">
     <div class="row g-4">
-      <aside class="col-lg-3"><div id="sidebar-placeholder"></div><%@ include file="/WEB-INF/components/sidebar.jsp"%></aside>
+      <aside class="col-lg-3"><%@ include file="/WEB-INF/components/sidebar.jsp"%></aside>
 
       <section class="col-lg-9">
-        <!-- ==================== 검색/필터 바 ==================== -->
-        <div class="filter-bar">
-          <select class="form-select form-select-sm" style="width:140px;">
-            <option selected>全区分</option>
-            <option>重要</option>
-            <option>一般</option>
+
+        <%-- ==================== 처리 결과 안내 ==================== --%>
+        <c:if test="${param.result eq 'created'}">
+          <div class="alert alert-success py-2 px-3 small">お知らせを登録しました。</div>
+        </c:if>
+        <c:if test="${param.result eq 'deleted'}">
+          <div class="alert alert-success py-2 px-3 small">お知らせを削除しました。</div>
+        </c:if>
+        <c:if test="${param.result eq 'not_found'}">
+          <div class="alert alert-warning py-2 px-3 small">対象のお知らせが見つかりません。</div>
+        </c:if>
+
+        <%-- ==================== 검색 / 필터 바 ====================
+             GET 으로 제출한다. 그래야 검색 결과 URL 을 그대로 공유할 수 있고
+             페이지 이동 시에도 조건이 유지된다.                        --%>
+        <form class="filter-bar" method="get" action="${cp}/pages/notice.do">
+
+          <select name="category" class="form-select form-select-sm" style="width:140px;"
+                  onchange="this.form.submit()">
+            <option value="">全区分</option>
+            <%-- 선택 상태를 유지한다 --%>
+            <option value="人事" ${category eq '人事' ? 'selected' : ''}>人事</option>
+            <option value="総務" ${category eq '総務' ? 'selected' : ''}>総務</option>
+            <option value="IT"   ${category eq 'IT'   ? 'selected' : ''}>IT</option>
+            <option value="緊急" ${category eq '緊急' ? 'selected' : ''}>緊急</option>
+            <option value="一般" ${category eq '一般' ? 'selected' : ''}>一般</option>
           </select>
-          <select class="form-select form-select-sm" style="width:160px;">
-            <option selected>全部署</option>
-            <option>人事部</option>
-            <option>総務部</option>
-            <option>IT支援部</option>
-          </select>
-          <div class="input-group input-group-sm ms-auto" style="max-width:260px;">
-            <input type="text" class="form-control" placeholder="タイトルを検索">
-            <button class="btn btn-teal" type="button"><i class="bi bi-search"></i></button>
+
+          <div class="input-group input-group-sm ms-auto" style="max-width:300px;">
+            <input type="text" name="keyword" class="form-control"
+                   placeholder="タイトル・本文を検索"
+                   value="<c:out value='${keyword}'/>">
+            <button class="btn btn-teal" type="submit" aria-label="検索">
+              <i class="bi bi-search"></i>
+            </button>
           </div>
-        </div>
+
+          <%-- 검색어가 있으면 초기화 버튼을 보여준다 --%>
+          <c:if test="${not empty keyword or not empty category}">
+            <a href="${cp}/pages/notice.do" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-x-lg"></i>
+            </a>
+          </c:if>
+        </form>
 
         <div class="panel">
           <div class="panel-header">
             <h5><i class="bi bi-list-ul"></i> お知らせ一覧</h5>
-            <span class="text-muted" style="font-size:.8rem;">全 24件</span>
+            <span class="text-muted" style="font-size:.8rem;">
+              全 ${paging.totalCount}件
+              <c:if test="${not empty keyword}">
+                （「<c:out value="${keyword}"/>」の検索結果）
+              </c:if>
+            </span>
           </div>
+
           <div class="table-scroll">
             <table class="table list-table mb-0">
               <thead>
                 <tr>
-                  <th style="width:60px;" class="text-center">No</th>
-                  <th style="width:80px;" class="text-center">区分</th>
+                  <th style="width:60px;"  class="text-center">No</th>
+                  <th style="width:80px;"  class="text-center">区分</th>
                   <th>タイトル</th>
-                  <th style="width:120px;" class="text-center">作成者</th>
+                  <th style="width:140px;" class="text-center">作成者</th>
                   <th style="width:110px;" class="text-center">登録日</th>
-                  <th style="width:70px;" class="text-center">閲覧</th>
+                  <th style="width:70px;"  class="text-center">閲覧</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td class="text-center">24</td>
-                  <td class="text-center"><span class="badge-fixed">重要</span></td>
-                  <td><a href="${pageContext.request.contextPath}/pages/notice-view.do" class="title-link">2026年 夏季休暇および勤務制度のご案内</a></td>
-                  <td class="text-center">人事部</td>
-                  <td class="text-center">2026.08.12</td>
-                  <td class="text-center">312</td>
-                </tr>
-                <tr>
-                  <td class="text-center">23</td>
-                  <td class="text-center"><span class="badge-fixed">重要</span></td>
-                  <td><a href="${pageContext.request.contextPath}/pages/notice-view.do" class="title-link">社内システム定期点検のお知らせ（8/16 2:00〜5:00）</a></td>
-                  <td class="text-center">IT支援部</td>
-                  <td class="text-center">2026.08.11</td>
-                  <td class="text-center">198</td>
-                </tr>
-                <tr>
-                  <td class="text-center">22</td>
-                  <td class="text-center"><span class="badge-normal">一般</span></td>
-                  <td><a href="${pageContext.request.contextPath}/pages/notice-view.do" class="title-link">第3四半期 社内サークル支援金申請のご案内</a></td>
-                  <td class="text-center">総務部</td>
-                  <td class="text-center">2026.08.10</td>
-                  <td class="text-center">87</td>
-                </tr>
-                <tr>
-                  <td class="text-center">21</td>
-                  <td class="text-center"><span class="badge-normal">一般</span></td>
-                  <td><a href="${pageContext.request.contextPath}/pages/notice-view.do" class="title-link">新入社員オリエンテーション日程のお知らせ</a></td>
-                  <td class="text-center">人事部</td>
-                  <td class="text-center">2026.08.08</td>
-                  <td class="text-center">150</td>
-                </tr>
-                <tr>
-                  <td class="text-center">20</td>
-                  <td class="text-center"><span class="badge-normal">一般</span></td>
-                  <td><a href="${pageContext.request.contextPath}/pages/notice-view.do" class="title-link">本社駐車場利用案内の変更事項</a></td>
-                  <td class="text-center">総務部</td>
-                  <td class="text-center">2026.08.07</td>
-                  <td class="text-center">76</td>
-                </tr>
-                <tr>
-                  <td class="text-center">19</td>
-                  <td class="text-center"><span class="badge-normal">一般</span></td>
-                  <td><a href="${pageContext.request.contextPath}/pages/notice-view.do" class="title-link">社内食堂メニュー変更のお知らせ（9月分）</a></td>
-                  <td class="text-center">総務部</td>
-                  <td class="text-center">2026.08.05</td>
-                  <td class="text-center">64</td>
-                </tr>
-                <tr>
-                  <td class="text-center">18</td>
-                  <td class="text-center"><span class="badge-normal">一般</span></td>
-                  <td><a href="${pageContext.request.contextPath}/pages/notice-view.do" class="title-link">社内セキュリティ研修（e-ラーニング）受講案内</a></td>
-                  <td class="text-center">IT支援部</td>
-                  <td class="text-center">2026.08.03</td>
-                  <td class="text-center">203</td>
-                </tr>
-                <tr>
-                  <td class="text-center">17</td>
-                  <td class="text-center"><span class="badge-normal">一般</span></td>
-                  <td><a href="${pageContext.request.contextPath}/pages/notice-view.do" class="title-link">7月度 優秀社員表彰式のご案内</a></td>
-                  <td class="text-center">人事部</td>
-                  <td class="text-center">2026.07.30</td>
-                  <td class="text-center">142</td>
-                </tr>
+
+                <c:forEach var="notice" items="${noticeList}">
+                  <tr>
+                    <td class="text-center">${notice.notice_no}</td>
+
+                    <%-- 고정글은 강조 배지 --%>
+                    <td class="text-center">
+                      <span class="${notice.pinned ? 'badge-fixed' : 'badge-normal'}">
+                        <c:out value="${empty notice.category ? '一般' : notice.category}"/>
+                      </span>
+                    </td>
+
+                    <td>
+                      <a href="${cp}/pages/notice-view.do?no=${notice.notice_no}"
+                         class="title-link"><c:out value="${notice.title}"/></a>
+
+                      <%-- 첨부파일이 있으면 클립 아이콘 --%>
+                      <c:if test="${notice.hasFile}">
+                        <i class="bi bi-paperclip text-muted ms-1" title="添付あり"></i>
+                      </c:if>
+                    </td>
+
+                    <td class="text-center">
+                      <c:out value="${empty notice.dept_name ? notice.emp_name : notice.dept_name}"/>
+                    </td>
+                    <td class="text-center">${notice.reg_date}</td>
+                    <td class="text-center">${notice.read_count}</td>
+                  </tr>
+                </c:forEach>
+
+                <%-- 결과가 없을 때 --%>
+                <c:if test="${empty noticeList}">
+                  <tr>
+                    <td colspan="6" class="text-center py-5">
+                      <div class="empty-state">
+                        <i class="bi bi-megaphone"></i>
+                        <h6>お知らせはありません</h6>
+                        <p class="small mb-0">
+                          <c:choose>
+                            <c:when test="${not empty keyword}">
+                              検索条件を変更してもう一度お試しください。
+                            </c:when>
+                            <c:otherwise>
+                              新しいお知らせをお待ちください。
+                            </c:otherwise>
+                          </c:choose>
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                </c:if>
+
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- 一般社員ではこの作成ボタンを描画しない権限制御状態 -->
-        <div class="d-flex justify-content-between align-items-center mt-3" data-authorized-only>
-          <a href="${pageContext.request.contextPath}/pages/notice-write.do" class="btn btn-teal btn-sm"><i class="bi bi-pencil-square"></i> お知らせ作成</a>
-        </div>
-        <div class="panel mt-4 d-none" id="emptyNotice"><div class="empty-state"><i class="bi bi-megaphone"></i><h6>お知らせはありません</h6><p class="small mb-0">検索条件を変更するか、新しいお知らせをお待ちください。</p></div></div>
+        <%-- 작성 버튼 : 관리자에게만 --%>
+        <c:if test="${not empty loginUser and loginUser.admin}">
+          <div class="d-flex justify-content-end align-items-center mt-3">
+            <a href="${cp}/pages/notice-write.do" class="btn btn-teal btn-sm">
+              <i class="bi bi-pencil-square"></i> お知らせ作成
+            </a>
+          </div>
+        </c:if>
 
-        <!-- ==================== 페이지네이션 ==================== -->
-        <div class="pagination-wrap">
-          <ul class="pagination">
-            <li class="page-item disabled"><a class="page-link" href="#">前へ</a></li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">次へ</a></li>
-          </ul>
-        </div>
+        <%-- ==================== 페이지네이션 ====================
+             검색 조건을 유지한 채 페이지를 이동해야 한다.       --%>
+        <c:set var="pagingUrl"   value="${cp}/pages/notice.do"/>
+        <c:set var="pagingQuery" value="&keyword=${keyword}&category=${category}"/>
+        <%@ include file="/WEB-INF/components/paging.jsp"%>
+
       </section>
     </div>
   </div>
 </div>
 
-<div id="footer-placeholder"></div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-<script src="../js/common.js"></script>
-<script src="../js/notice.js"></script>
-</body>
+<script src="${cp}/js/common.js"></script>
 <%@ include file="/WEB-INF/components/footer.jsp"%>
+</body>
 </html>

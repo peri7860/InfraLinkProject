@@ -14,10 +14,10 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap"
 	rel="stylesheet">
-<link rel="stylesheet" href="../css/common.css">
-<link rel="stylesheet" href="../css/header.css">
-<link rel="stylesheet" href="../css/footer.css">
-<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
 </head>
 <body data-page="approval"><%@ include
 		file="/WEB-INF/components/header.jsp"%><%@ include
@@ -104,6 +104,6 @@
 	</div>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-	<script src="../js/common.js"></script>
+	<script src="${pageContext.request.contextPath}/js/common.js"></script>
 	<script>document.getElementById('documentType').addEventListener('change',function(){['leave','trip','expense','purchase'].forEach(function(type){document.getElementById(type+'Fields').classList.toggle('d-none',type!==document.getElementById('documentType').value);});});</script>
 </body><%@ include file="/WEB-INF/components/footer.jsp"%></html>

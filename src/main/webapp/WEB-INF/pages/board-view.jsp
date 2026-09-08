@@ -12,14 +12,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="../css/common.css">
-<link rel="stylesheet" href="../css/header.css">
-<link rel="stylesheet" href="../css/footer.css">
-<link rel="stylesheet" href="../css/responsive.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
 </head>
 <body data-page="board">
 
-<div id="header-placeholder"></div>
 <div id="modal-placeholder"></div>
 <%@ include file="/WEB-INF/components/header.jsp"%>
 <%@ include file="/WEB-INF/components/modal.jsp"%>
@@ -28,8 +27,8 @@
     <h1><i class="bi bi-clipboard2-data"></i> 掲示板</h1>
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="../index.html">ホーム</a></li>
-        <li class="breadcrumb-item"><a href="board-list.html">掲示板</a></li>
+        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/index.do">ホーム</a></li>
+        <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/pages/board.do">掲示板</a></li>
         <li class="breadcrumb-item active" aria-current="page">詳細</li>
       </ol>
     </nav>
@@ -60,7 +59,7 @@
 			<div class="attachment-row mt-4"><span class="attachment-icon"><i class="bi bi-file-earmark-image"></i></span><div class="flex-grow-1"><b class="small">社員食堂_新メニュー.jpg</b><div class="small text-muted">JPG・1.2 MB</div></div><button class="btn btn-outline-teal btn-sm">プレビュー</button><button class="btn btn-outline-secondary btn-sm">ダウンロード</button></div>
           </div>
           <div class="view-footer">
-            <a href="board-list.html" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list"></i> 一覧に戻る</a>
+            <a href="${pageContext.request.contextPath}/pages/board.do" class="btn btn-outline-secondary btn-sm"><i class="bi bi-list"></i> 一覧に戻る</a>
             <div class="d-flex gap-2">
               <a href="${pageContext.request.contextPath}/pages/board-write.do" class="btn btn-outline-teal btn-sm"><i class="bi bi-pencil"></i> 編集</a>
               <button type="button" class="btn btn-sm text-white" style="background:var(--warn);" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"><i class="bi bi-trash"></i> 削除</button>
@@ -102,11 +101,10 @@
   </div>
 </div>
 
-<div id="footer-placeholder"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-<script src="../js/common.js"></script>
-<script src="../js/board.js"></script>
-</body>
+<script src="${pageContext.request.contextPath}/js/common.js"></script>
+<script src="${pageContext.request.contextPath}/js/board.js"></script>
 <%@ include file="/WEB-INF/components/footer.jsp"%>
+</body>
 </html>
