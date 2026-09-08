@@ -14,7 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import service.ApprovalListService;
 import service.ApprovalProcessService;
 import service.ApprovalViewService;
+import service.AdminDashboardService;
 import service.ApprovalWriteService;
+import service.AttendanceCheckService;
+import service.AttendanceService;
 import service.BoardDeleteService;
 import service.BoardInsertService;
 import service.BoardListService;
@@ -36,6 +39,7 @@ import service.EmployeeUpdateService;
 import service.FileDownloadService;
 import service.LoginService;
 import service.LogoutService;
+import service.MainPageService;
 import service.MyPageService;
 import service.NoticeDeleteService;
 import service.NoticeInsertService;
@@ -43,8 +47,16 @@ import service.NoticeListService;
 import service.NoticeUpdateService;
 import service.NoticeViewService;
 import service.NoticeWriteFormService;
+import service.NotificationListService;
+import service.NotificationReadService;
+import service.RoomCancelService;
+import service.RoomListService;
+import service.RoomReserveService;
+import service.RoomViewService;
 import service.ScheduleListService;
+import service.ScheduleDeleteService;
 import service.ScheduleViewService;
+import service.ScheduleWriteService;
 import service.SystemStatusService;
 import service.UpdateMyInfoService;
 
@@ -162,6 +174,34 @@ public class pages extends HttpServlet {
 		// =========================================================
 		COMMANDS.put("/schedule.do", new ScheduleListService());
 		COMMANDS.put("/schedule-view.do", new ScheduleViewService());
+		COMMANDS.put("/schedule-write.do", new ScheduleWriteService());
+		COMMANDS.put("/scheduleDelete.do", new ScheduleDeleteService());
+
+		// =========================================================
+		// 회의실 예약
+		// =========================================================
+		COMMANDS.put("/room.do", new RoomListService());
+		COMMANDS.put("/room-view.do", new RoomViewService());
+		COMMANDS.put("/room-write.do", new RoomReserveService());
+		COMMANDS.put("/roomCancel.do", new RoomCancelService());
+
+		// =========================================================
+		// 근태
+		// =========================================================
+		COMMANDS.put("/attendance.do", new AttendanceService());
+		COMMANDS.put("/attendanceCheck.do", new AttendanceCheckService());
+
+		// =========================================================
+		// 알림
+		// =========================================================
+		COMMANDS.put("/notifications.do", new NotificationListService());
+		COMMANDS.put("/notificationRead.do", new NotificationReadService());
+
+		// =========================================================
+		// 관리자 / 메인
+		// =========================================================
+		COMMANDS.put("/admin-dashboard.do", new AdminDashboardService());
+		COMMANDS.put("/index.do", new MainPageService());
 
 		// =========================================================
 		// 공통
@@ -177,22 +217,7 @@ public class pages extends HttpServlet {
 		VIEWS.put("/login.do", "login.jsp");
 		VIEWS.put("/password-reset.do", "password-reset.jsp");
 
-		// TODO: ScheduleWriteService 구현 후 COMMANDS 로 이동
-		VIEWS.put("/schedule-write.do", "schedule-write.jsp");
-
-		// TODO: 회의실 예약 서비스 4종 구현 후 COMMANDS 로 이동
-		VIEWS.put("/room.do", "room-reserve.jsp");
-		VIEWS.put("/room-view.do", "room-reserve-view.jsp");
-		VIEWS.put("/room-write.do", "room-reserve-write.jsp");
-
-		// TODO: AttendanceService 구현 후 COMMANDS 로 이동
-		VIEWS.put("/attendance.do", "attendance.jsp");
-
-		// TODO: NotificationListService 구현 후 COMMANDS 로 이동
-		VIEWS.put("/notifications.do", "notifications.jsp");
-
-		// TODO: AdminDashboardService 구현 후 COMMANDS 로 이동
-		VIEWS.put("/admin-dashboard.do", "admin-dashboard.jsp");
+		// 관리자 활동 로그 — 감사 로그 테이블이 아직 없어 화면만 유지한다.
 		VIEWS.put("/admin-activity.do", "admin-activity.jsp");
 
 		// 결재 규칙 / 역할 관리 화면
@@ -270,18 +295,7 @@ public class pages extends HttpServlet {
 		}
 
 		// -------------------------------------------------------------
-		// 3. 메인 화면
-		//   [수정] 기존에는 "/webapp/index.jsp" 를 가리켰다.
-		//          webapp 은 배포 시 사라지는 소스 폴더명이라 존재하지 않는다.
-		//          실제 배포 경로는 컨텍스트 루트 바로 아래의 /index.jsp 다.
-		// -------------------------------------------------------------
-		if ("/index.do".equals(action)) {
-			request.getRequestDispatcher("/index.jsp").forward(request, response);
-			return;
-		}
-
-		// -------------------------------------------------------------
-		// 4. 등록되지 않은 경로
+		// 3. 등록되지 않은 경로
 		//   web.xml 의 error-page 설정에 따라 error-404.jsp 가 표시된다.
 		// -------------------------------------------------------------
 		System.out.println("[pages] 등록되지 않은 경로 : " + action);

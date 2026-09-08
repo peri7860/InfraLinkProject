@@ -107,19 +107,19 @@ public class Home extends HttpServlet {
 
 		// -------------------------------------------------------------
 		// 2. 루트 요청 → 메인 화면
+		//
+		//    [수정] 예전에는 곧바로 /index.jsp 로 forward 했다.
+		//           그러면 메인 화면 위젯(공지·일정·결재 대기)에 넣을 데이터를
+		//           준비할 자리가 없어 화면이 하드코딩으로 남을 수밖에 없었다.
+		//           → MainPageService 를 거치도록 /pages/index.do 로 넘긴다.
+		//
+		//    화면 곳곳(header.jsp, login.jsp 등)에 컨텍스트 경로 바로 뒤에
+		//    "/index.do" 를 붙인 링크가 남아 있어 함께 받아준다.
 		// -------------------------------------------------------------
-		if (path.isEmpty() || "/".equals(path) || "/index.jsp".equals(path)) {
-			request.getRequestDispatcher("/index.jsp").forward(request, response);
-			return;
-		}
+		if (path.isEmpty() || "/".equals(path)
+				|| "/index.jsp".equals(path) || "/index.do".equals(path)) {
 
-		// -------------------------------------------------------------
-		// 3. 예전 링크 호환
-		//    화면 여기저기에 컨텍스트 경로 바로 뒤에 "/index.do" 를 붙인
-		//    링크가 남아 있어(header.jsp, login.jsp 등) 그대로 받아준다.
-		// -------------------------------------------------------------
-		if ("/index.do".equals(path)) {
-			request.getRequestDispatcher("/index.jsp").forward(request, response);
+			request.getRequestDispatcher("/pages/index.do").forward(request, response);
 			return;
 		}
 
